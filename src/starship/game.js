@@ -202,6 +202,7 @@ export default class Game extends Phaser.Scene {
         this.players.remove(player);
         player.dead();
         this.playAudio("explosion");
+        if(this.players.countActive() <= 0){
         this.time.delayedCall(
           2000,
           () => {
@@ -210,6 +211,7 @@ export default class Game extends Phaser.Scene {
           null,
           this
         );
+      }
         // this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);
 
       }

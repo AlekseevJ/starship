@@ -50,6 +50,18 @@ class Player extends Phaser.GameObjects.Sprite {
             .setOrigin(0.5)
             .setScrollFactor(0);
         }
+        else {
+            this.hpCounterBar = this.scene.add
+            .bitmapText(
+                this.scene.width -150,
+                160,
+                "wendy",
+                String(this.hp),
+                50
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0);
+        }
     }
 
     spawnShadow(x, y) {

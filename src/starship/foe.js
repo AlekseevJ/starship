@@ -92,6 +92,24 @@ class Foe extends Phaser.GameObjects.Sprite {
     this.direction = -1;
   }
 
+  randPlayerFoeShot(shot)
+  {
+    this.scene.players.shuffle();
+    let player = this.scene.players.getFirstAlive();
+    this.scene.physics.moveTo(
+      shot,
+      player.x,
+      player.y,
+      300
+    );
+    this.scene.physics.moveTo(
+      shot.shadow,
+      player.x,
+      player.y,
+      300
+    );
+  } 
+
   update() {
     if (this.y > this.scene.height + 64) {
       if (this.name !== "foe2") this.shadow.destroy();
@@ -143,18 +161,7 @@ class Foe extends Phaser.GameObjects.Sprite {
       this.scene.playAudio("foeshot");
       let shot = new FoeShot(this.scene, this.x, this.y, "foe", this.name);
       this.scene.foeShots.add(shot);
-      this.scene.physics.moveTo(
-        shot,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
-      this.scene.physics.moveTo(
-        shot.shadow,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
+      this.randPlayerFoeShot(shot);
     }
 
     if (this.name !== "foe2") {
