@@ -39,7 +39,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.life = life;
         this.addHpCounter();
         this.addLifeCounter();
-        this.maxVelocity = 900;
+        this.maxVelocity = 800;
         this.stepVelocity = 100;
     }
 
@@ -249,12 +249,21 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         } else {
             if (Math.abs(this.body.velocity.y) < this.maxVelocity) {
-                if(Math.abs(y) != Math.abs(this.body.velocity.y)){
-                    this.body.setVelocityY(this.body.velocity.y + 2*y);
-                }else
-                this.body.setVelocityY(this.body.velocity.y + y);
+                if(Math.sign(y) != Math.sign(this.body.velocity.y) && Math.sign(this.body.velocity.y) != 0) {
+                    
+                    console.log(" ili eta?");
+                this.setRealVelocityY(this.body.velocity.y + (y*5));
+                }else{
+                    console.log(" eta?");
+                this.setRealVelocityY(this.body.velocity.y + y);}
             }
         }
+    }
+
+    setRealVelocityY(realVelocity) {
+        if(Math.abs(realVelocity) > this.maxVelocity){
+        this.body.setVelocityY(Math.sign(realVelocity)*this.maxVelocity);
+    } else  this.body.setVelocityY(realVelocity);
     }
 
     update(timestep, delta) {
@@ -277,12 +286,14 @@ class Player extends Phaser.GameObjects.Sprite {
             this.shadow.setScale(1, 1);
         }
         this.changeVelocityX();
-        if (this.up.isDown) {
+        if (this.up.isDown ) {
             this.changeVelocityY(-this.stepVelocity);
-        } else if (this.down.isDown) {
+        } else if (this.down.isDown ) {
             this.changeVelocityY(+this.stepVelocity);
         }
+            
         this.changeVelocityY();
+       
 
         if (Phaser.Input.Keyboard.JustDown(this.SPACE)) {
             this.shoot();

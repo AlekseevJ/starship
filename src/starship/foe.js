@@ -35,14 +35,16 @@ class Foe extends Phaser.GameObjects.Sprite {
   setSizeFoe(name) {
     if (name === 'sultan') {
       this.body.setSize(125, 80);
+    } else if(name === 'guinxu') {
+      this.body.setSize(90, 110);
+      
     } else {
       this.body.setCircle(TYPES[name].circle);
       this.body.setOffset(TYPES[name].offestX, 12);
     }
   }
 
-  changeVelocityY(velocity)
-  {
+  changeVelocityY(velocity) {
     this.body.setVelocityY(velocity);
   }
 
@@ -92,36 +94,39 @@ class Foe extends Phaser.GameObjects.Sprite {
     this.direction = -1;
   }
 
-  randPlayerFoeShot(shot)
-  {
+  randPlayerFoeShot(shot) {
+    let xMarkSpread = Phaser.Math.Between(-100, 100);
+    let yMarkSpread = Phaser.Math.Between(-100, 100);
     this.scene.players.shuffle();
-    if(this.scene.players.getLength() > 0) {
-    let player = this.scene.players.getFirstAlive();
-    this.scene.physics.moveTo(
-      shot,
-      player.x,
-      player.y,
-      300
-    );
-    this.scene.physics.moveTo(
-      shot.shadow,
-      player.x,
-      player.y,
-      300
-    );} else {
+    if (this.scene.players.getLength() > 0) {
+      let player = this.scene.players.getFirstAlive();
       this.scene.physics.moveTo(
         shot,
-        this.scene.width+50,
+        player.x+xMarkSpread,
+        player.y+yMarkSpread,
+        300
+      );
+      this.scene.physics.moveTo(
+        shot.shadow,
+        player.x+xMarkSpread,
+        player.y+yMarkSpread,
+        300
+      );
+    } else {
+      this.scene.physics.moveTo(
+        shot,
+        this.scene.width + 50,
         this.scene.height + 50,
         300
       );
       this.scene.physics.moveTo(
         shot.shadow,
-        this.scene.width+50,
-        this.scene.height+50,
+        this.scene.width + 50,
+        this.scene.height + 50,
         300
-    );}
-  } 
+      );
+    }
+  }
 
   update() {
     if (this.y > this.scene.height + 64) {
@@ -132,43 +137,18 @@ class Foe extends Phaser.GameObjects.Sprite {
 
     if (this.name === "guinxu" && Phaser.Math.Between(1, 6) > 5) {
       this.guinxuShot();
-    } else if ( this.name === "sultan" && Phaser.Math.Between(1, 55) > 54) {
+    } else if (this.name === "sultan" && Phaser.Math.Between(1, 55) > 54) {
       if (!this.scene || !this.scene.player) return;
       this.scene.playAudio("foeshot");
-      let shot = new FoeShot(this.scene, this.x+30, this.y, "sultan", this.name);
+      let shot = new FoeShot(this.scene, this.x + 30, this.y, "sultan", this.name);
       this.scene.foeShots.add(shot);
-      this.scene.physics.moveTo(
-        shot,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
-      this.scene.physics.moveTo(
-        shot.shadow,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
-
-      let shot2 = new FoeShot(this.scene, this.x-30, this.y, "sultan", this.name);
+      this.randPlayerFoeShot(shot);
+      let shot2 = new FoeShot(this.scene, this.x - 30, this.y, "sultan", this.name);
       this.scene.foeShots.add(shot2);
-      this.scene.physics.moveTo(
-        shot2,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
-      this.scene.physics.moveTo(
-        shot2.shadow,
-        this.scene.player.x,
-        this.scene.player.y,
-        300
-      );
-      
-
+      this.randPlayerFoeShot(shot2);
     }
-    
-    
+
+
     else if (Phaser.Math.Between(1, 101) > 100) {
       if (!this.scene || !this.scene.player) return;
       this.scene.playAudio("foeshot");
@@ -243,8 +223,8 @@ class Foe extends Phaser.GameObjects.Sprite {
       this.scene.endScene();
     }
     this.scene.foes.foeCount--;
-    if(Phaser.Math.Between(1, 15) > 14){
-       this.scene.spawnShake(this.x, this.y);
+    if (Phaser.Math.Between(1, 15) > 14) {
+      this.scene.spawnShake(this.x, this.y);
     }
     this.destroy();
   }

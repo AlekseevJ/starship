@@ -28,7 +28,7 @@ export default class FoeGenerator {
     }
 
     generate() {
-        // this.scene.time.delayedCall(2000, () => this.spawnSultan(), null, this); return;
+        // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
         if (this.scene.number === 4) {
             this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this);
         } else {
