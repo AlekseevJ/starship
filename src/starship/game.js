@@ -393,9 +393,7 @@ export default class Game extends Phaser.Scene {
       () => {
         this.game.sound.stopAll();
         this.scene.stop("game");
-        this.scene.start(scene, {
-          next: "gameover",
-        });
+        this.scene.start("gameover");
       },
       null,
       this

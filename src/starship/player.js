@@ -158,11 +158,6 @@ class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
-
-
-
-
-
     shoot() {
         this.scene.playAudio("shot");
         this.shootingPatterns.shoot(this.x, this.y, this.powerUp);
