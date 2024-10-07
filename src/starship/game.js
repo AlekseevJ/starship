@@ -201,10 +201,17 @@ export default class Game extends Phaser.Scene {
       if (player.hp < 0) {
         this.players.remove(player);
         player.dead();
-        // this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);
         this.playAudio("explosion");
+        this.time.delayedCall(
+          2000,
+          () => {
+            this.gameOverScene();
+          },
+          null,
+          this
+        );
+        // this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);
 
-        this.gameOverScene();
       }
       else {
         // добавить звук снижения hp
@@ -382,10 +389,10 @@ export default class Game extends Phaser.Scene {
   gameOverScene() {
     this.shadowDestroy();
     this.game.sound.stopAll();
-    this.scene.stop("game");
     this.time.delayedCall(
       2000,
       () => {
+        this.scene.stop("game");
         this.scene.start(scene, {
           next: "gameover",
         });
