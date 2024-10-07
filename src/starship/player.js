@@ -250,11 +250,8 @@ class Player extends Phaser.GameObjects.Sprite {
         } else {
             if (Math.abs(this.body.velocity.y) < this.maxVelocity) {
                 if(Math.sign(y) != Math.sign(this.body.velocity.y) && Math.sign(this.body.velocity.y) != 0) {
-                    
-                    console.log(" ili eta?");
                 this.setRealVelocityY(this.body.velocity.y + (y*5));
                 }else{
-                    console.log(" eta?");
                 this.setRealVelocityY(this.body.velocity.y + y);}
             }
         }

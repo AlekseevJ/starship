@@ -13,8 +13,6 @@ export default class Game extends Phaser.Scene {
   }
 
   init(data) {
-
-    console.log(data.player1hp, data.player1life);
     this.name = data.name;
     this.number = data.number;
     this.next = data.next;
@@ -36,7 +34,6 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    console.log('create');
     this.duration = this.time * 1000;
     this.width = this.sys.game.config.width;
     this.height = this.sys.game.config.height;
@@ -98,7 +95,6 @@ export default class Game extends Phaser.Scene {
 
 
   addPlayers() {
-    console.log(this.registry.get('player1hp'), this.registry.get('player1life'));
     this.trailLayer = this.add.layer();
     this.players = this.add.group();
     this.player = new Player(this, this.center_width, this.center_height, 
