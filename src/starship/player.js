@@ -33,6 +33,23 @@ class Player extends Phaser.GameObjects.Sprite {
             left: [() => this.y, () => this.x - 400],
             right: [() => this.y, () => this.x + 400],
         };
+        this.hp = 3;
+        this.addHpCounter();
+    }
+
+    addHpCounter() {
+        if(this.name == 'player1'){
+        this.hpCounterBar = this.scene.add
+            .bitmapText(
+                150,
+                160,
+                "wendy",
+                String(this.hp),
+                50
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0);
+        }
     }
 
     spawnShadow(x, y) {
@@ -153,6 +170,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update(timestep, delta) {
         if (this.death) return;
+        this.hpCounterBar.setText(this.hp);
         if (this.signalEvent.length > 0) {
             this.dash();
         }
@@ -216,6 +234,7 @@ class Player extends Phaser.GameObjects.Sprite {
                 explosion.destroy();
             },
         });
+        this.hpCounterBar.destroy();
         this.scene.cameras.main.shake(500);
         this.death = true;
         this.shadow.destroy();

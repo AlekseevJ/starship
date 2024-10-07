@@ -8,7 +8,7 @@ export default class FoeGenerator {
         this.activeWave = false;
         this.waves = 0;
         this.foeCount = 0;
-        this.addFoeCounter();
+        // this.addFoeCounter();
         this.eventCounter = 0;
         this.markSultan = false;
 
@@ -313,7 +313,7 @@ export default class FoeGenerator {
     }
 
     update() {
-        this.foeCounter.setText(this.foeCount);
+        // this.foeCounter.setText(this.foeCount);
         if (this.path) {
             this.path.draw(this.graphics);
             this.scene.foeWaveGroup.children.entries.forEach((foe) => {

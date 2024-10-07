@@ -18,7 +18,7 @@ export default class Game extends Phaser.Scene {
     this.next = data.next;
     this.currentPowerUp = +this.registry.get("currentPowerUp");
     this.playersNumber = data.players;
-    this.volume = {volume: 0.5};
+    this.volume = { volume: 0.5 };
   }
 
   create() {
@@ -39,15 +39,9 @@ export default class Game extends Phaser.Scene {
     this.addShots();
     this.loadAudios();
     this.addColliders();
-    this.shake = new PowerUp(this, 59, 69);
-    this.powerUps.add(this.shake);
-    this.shake = new PowerUp(this, 99, 99);
-    this.powerUps.add(this.shake);
-    this.shake = new PowerUp(this, 139, 129);
-    this.powerUps.add(this.shake);
-    this.shake = new PowerUp(this, 179, 149);
-    this.powerUps.add(this.shake);
   }
+
+
 
   addBackground() {
     this.background = this.add
@@ -56,8 +50,8 @@ export default class Game extends Phaser.Scene {
       .setScrollFactor(0, 1);
   }
   sultanDefeat() {
-    this.scene.time.delayedCall(2000, () =>  this.finishScene(), null, this);
-}
+    this.scene.time.delayedCall(2000, () => this.finishScene(), null, this);
+  }
 
   spawnShake(x, y) {
     this.shake = new PowerUp(this, x, y);
@@ -89,16 +83,16 @@ export default class Game extends Phaser.Scene {
 
 
   addPlayers() {
-      this.trailLayer = this.add.layer();
-      this.players = this.add.group();
-      this.player = new Player(this, this.center_width, this.center_height, 'player1', this.registry.get("currentPowerUp"+'player1'));
-      this.players.add(this.player);
+    this.trailLayer = this.add.layer();
+    this.players = this.add.group();
+    this.player = new Player(this, this.center_width, this.center_height, 'player1', this.registry.get("currentPowerUp" + 'player1'));
+    this.players.add(this.player);
 
-      if (this.playersNumber > 1) {
-        this.player2 = new Player(this, this.center_width - 10, this.center_height - 10, 'player2', this.registry.get("currentPowerUp"+'player2'));
-        this.players.add(this.player2);
-      }
-    
+    if (this.playersNumber > 1) {
+      this.player2 = new Player(this, this.center_width - 10, this.center_height - 10, 'player2', this.registry.get("currentPowerUp" + 'player2'));
+      this.players.add(this.player2);
+    }
+
   }
 
   addShots() {
@@ -191,6 +185,30 @@ export default class Game extends Phaser.Scene {
     this.physics.world.on("worldbounds", this.onWorldBounds);
   }
 
+  hitByHpPlayer(player) {
+    if (player.blinking === false) {
+      player.hp--;
+      this.player.blinking = true;
+      this.tweens.add({
+        targets: this.player,
+        duration: 100,
+        alpha: { from: 0, to: 1 },
+        repeat: 10,
+        onComplete: () => {
+          this.player.blinking = false;
+        },
+      });
+      if (player.hp < 0) {
+        this.players.remove(player);
+        player.dead();
+        this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);
+        this.playAudio("explosion");
+      }
+      else {
+        // добавить звук снижения hp
+      }
+    }
+  }
 
   onWorldBounds(body, t) {
     const name = body.gameObject.name.toString();
@@ -258,25 +276,19 @@ export default class Game extends Phaser.Scene {
 
 
   hitPlayer(player, shot) {
-    if(player.blinking === false){
-      this.players.remove(player);
-    player.dead();
-    this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);}
-    
-    this.playAudio("explosion");
+    this.hitByHpPlayer(player);
+
     shot.shadow.destroy();
     shot.destroy();
   }
 
   crashFoe(player, foe) {
-    if(player.blinking === false){
-      this.players.remove(player);
-    player.dead();
-    this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);}
-    this.playAudio("explosion");
-    if(foe.name === "guinxu"){foe.lives = foe.lives-5; if(foe.lives < 0) foe.dead();}else
-    foe.dead();
+    this.hitByHpPlayer(player);
+
+    if (foe.name === "guinxu") { foe.lives = foe.lives - 5; if (foe.lives < 0) foe.dead(); } else
+      foe.dead();
   }
+
 
   pickPowerUp(player, powerUp) {
     this.playAudio("stageclear1");
@@ -333,7 +345,7 @@ export default class Game extends Phaser.Scene {
       boss: this.sound.add("boss", this.volume),
       dash: this.sound.add("dash", this.volume),
       sultanarrive: this.sound.add("sultanarrive", this.volume),
-      sultan_fight: this.sound.add("sultan_fight",  {volume: 0.5, loop: true }),
+      sultan_fight: this.sound.add("sultan_fight", { volume: 0.5, loop: true }),
     };
   }
 
@@ -378,13 +390,13 @@ export default class Game extends Phaser.Scene {
   }
 
   updatePowerUp(player, powerUp) {
-   let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1 ;
-   if ( lvlUp +1  <= this.available.length){
-     player.powerUp = this.available[lvlUp ];
-     this.registry.set("currentPowerUp"+player.name, player.powerUp);
-   } else {
-    this.updateScore(player.name, 5000);
-   }
+    let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1;
+    if (lvlUp + 1 <= this.available.length) {
+      player.powerUp = this.available[lvlUp];
+      this.registry.set("currentPowerUp" + player.name, player.powerUp);
+    } else {
+      this.updateScore(player.name, 5000);
+    }
   }
 
   updateScore(playerName, points = 0) {
