@@ -79,8 +79,10 @@ export default class BootLoader extends Phaser.Scene {
         this.load.audio("boss", "starship/assets/sounds/boss.mp3");
         this.load.audio("splash", "starship/assets/sounds/splash.mp3");
         this.load.audio('dash', "starship/assets/sounds/dash.mp3");
-        this.load.audio('sultanarrive', "starship/assets/sounds/sultan_arrive.mp3");
+        this.load.audio('sultanarrive', "starship/assets/sounds/sultan_arrive2.mp3");
         this.load.audio('sultan_fight', "starship/assets/sounds/sultan_fight.mp3");
+        this.load.audio('playerhit', "starship/assets/sounds/playerhit.mp3");
+        
         Array(3)
             .fill(0)
             .forEach((_, i) => {

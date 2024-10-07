@@ -39,23 +39,25 @@ class Player extends Phaser.GameObjects.Sprite {
         this.life = life;
         this.addHpCounter();
         this.addLifeCounter();
+        this.maxVelocity = 900;
+        this.stepVelocity = 100;
     }
 
     addLifeCounter() {
         this.lifeCounter = this.scene.add
-        .bitmapText(
-            175,
-            165,
-            "wendy",
-            String(this.life),
-            50
-        )
-        .setOrigin(0.5)
-        .setScrollFactor(0);
+            .bitmapText(
+                175,
+                165,
+                "wendy",
+                String(this.life),
+                50
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0);
     }
 
-    addTextForHpLife(x,y,text) {
-       return this.scene.add
+    addTextForHpLife(x, y, text) {
+        return this.scene.add
             .bitmapText(
                 x,
                 y,
@@ -68,29 +70,29 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     addHpCounter() {
-        if(this.name == 'player1'){
-        this.hpCounterBar = this.scene.add
-            .bitmapText(
-                150,
-                160,
-                "wendy",
-                String(this.hp),
-                50
-            )
-            .setOrigin(0.5)
-            .setScrollFactor(0);
+        if (this.name == 'player1') {
+            this.hpCounterBar = this.scene.add
+                .bitmapText(
+                    150,
+                    160,
+                    "wendy",
+                    String(this.hp),
+                    50
+                )
+                .setOrigin(0.5)
+                .setScrollFactor(0);
         }
         else {
             this.hpCounterBar = this.scene.add
-            .bitmapText(
-                this.scene.width -150,
-                160,
-                "wendy",
-                String(this.hp),
-                50
-            )
-            .setOrigin(0.5)
-            .setScrollFactor(0);
+                .bitmapText(
+                    this.scene.width - 150,
+                    160,
+                    "wendy",
+                    String(this.hp),
+                    50
+                )
+                .setOrigin(0.5)
+                .setScrollFactor(0);
         }
     }
 
@@ -205,6 +207,56 @@ class Player extends Phaser.GameObjects.Sprite {
         this.shootingPatterns.shoot(this.x, this.y, this.powerUp);
     }
 
+    changeVelocityX(x = 0) {
+        if (x == 0) {
+            switch (Math.sign(this.body.velocity.x)) {
+                case 1: {
+                    this.body.setVelocityX(this.body.velocity.x - (this.stepVelocity / 2));
+                    break;
+                }
+                case 0: {
+                    break;
+                }
+                case -1: {
+                    this.body.setVelocityX(this.body.velocity.x + (this.stepVelocity / 2));
+                    break;
+                }
+            }
+        } else {
+            if (Math.abs(this.body.velocity.x) < this.maxVelocity) {
+                if(Math.abs(x) != Math.abs(this.body.velocity.x)){
+                    this.body.setVelocityX(this.body.velocity.x + 2*x);
+                }else
+                this.body.setVelocityX(this.body.velocity.x + x);
+            }
+        }
+    }
+
+    changeVelocityY(y = 0) {
+        if (y == 0) {
+            switch (Math.sign(this.body.velocity.y)) {
+                case 1: {
+                    this.body.setVelocityY(this.body.velocity.y - (this.stepVelocity / 2));
+                    break;
+                }
+                case 0: {
+                    break;
+                }
+                case -1: {
+                    this.body.setVelocityY(this.body.velocity.y + (this.stepVelocity / 2));
+                    break;
+                }
+            }
+        } else {
+            if (Math.abs(this.body.velocity.y) < this.maxVelocity) {
+                if(Math.abs(y) != Math.abs(this.body.velocity.y)){
+                    this.body.setVelocityY(this.body.velocity.y + 2*y);
+                }else
+                this.body.setVelocityY(this.body.velocity.y + y);
+            }
+        }
+    }
+
     update(timestep, delta) {
         if (this.death) return;
         this.hpCounterBar.setText(this.hp);
@@ -213,23 +265,24 @@ class Player extends Phaser.GameObjects.Sprite {
             this.dash();
         }
         if (this.left.isDown) {
-            this.x -= 5;
+            this.changeVelocityX(-this.stepVelocity);
             this.anims.play(this.name + "left", true);
             this.shadow.setScale(0.5, 1);
         } else if (this.right.isDown) {
-            this.x += 5;
+            this.changeVelocityX(+this.stepVelocity);
             this.anims.play(this.name + "right", true);
             this.shadow.setScale(0.5, 1);
         } else {
             this.anims.play(this.name, true);
             this.shadow.setScale(1, 1);
         }
-
+        this.changeVelocityX();
         if (this.up.isDown) {
-            this.y -= 5;
+            this.changeVelocityY(-this.stepVelocity);
         } else if (this.down.isDown) {
-            this.y += 5;
+            this.changeVelocityY(+this.stepVelocity);
         }
+        this.changeVelocityY();
 
         if (Phaser.Input.Keyboard.JustDown(this.SPACE)) {
             this.shoot();

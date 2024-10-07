@@ -65,18 +65,18 @@ export default class FoeGenerator {
     }
 
     spawnSultan() {
-        this.scene.game.sound.stopAll();
+        this.scene.playAudio("sultanarrive");
         this.scene.time.addEvent(
             {
-                delay: 0,
+                delay: 100,
                 callback: () => {
-                    this.scene.playAudio("sultanarrive");
+                    this.scene.sound.get('music1').stop();
                 },
                 callbackScope: this,
                 loop: false,
             }
         );
-        this.scene.time.delayedCall(14000, () => this.arriveSultan(), null, this);
+        this.scene.time.delayedCall(4040, () => this.arriveSultan(), null, this);
     }
 
     arriveSultan() {

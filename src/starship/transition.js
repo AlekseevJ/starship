@@ -8,6 +8,8 @@ export default class Transition extends Phaser.Scene {
         this.number = data.number;
         this.next = data.next;
         this.players = data.players;
+        this.player1hp = data.player1hp;
+        this.player1life = data.player1life;
     }
 
     create() {
@@ -48,12 +50,15 @@ export default class Transition extends Phaser.Scene {
         this.playMusic("music" + (this.number !== 4 ? this.number : 1));
         this.time.delayedCall(2000, () => this.loadNext(), null, this);
     }
+
     loadNext() {
         this.scene.start(this.next, {
             name: this.name,
             number: this.number,
             time: this.time,
             players: this.players,
+            player1hp: this.player1hp,
+            player1life: this.player1life,
         });
     }
 
