@@ -4,6 +4,7 @@ import Transition from "./src/starship/transition";
 import Game from "./src/starship/game";
 import Outro from "./src/starship/outro";
 import Bootloader from "./src/starship/bootloader";
+import GameOver from "./src/starship/gameover";
 
 const config = {
     width: 1000,
@@ -21,7 +22,7 @@ const config = {
             debug: false,
         },
     },
-    scene: [Bootloader, Splash, Transition, Game, Outro],
+    scene: [Bootloader, Splash, Transition, Game, Outro, GameOver],
 }
 
 const game = new Phaser.Game(config);
