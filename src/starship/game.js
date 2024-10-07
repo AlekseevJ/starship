@@ -388,10 +388,10 @@ export default class Game extends Phaser.Scene {
 
   gameOverScene() {
     this.shadowDestroy();
-    this.game.sound.stopAll();
     this.time.delayedCall(
       2000,
       () => {
+        this.game.sound.stopAll();
         this.scene.stop("game");
         this.scene.start(scene, {
           next: "gameover",
