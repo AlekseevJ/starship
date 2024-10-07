@@ -95,6 +95,7 @@ class Foe extends Phaser.GameObjects.Sprite {
   randPlayerFoeShot(shot)
   {
     this.scene.players.shuffle();
+    if(this.scene.players.getLength() > 0) {
     let player = this.scene.players.getFirstAlive();
     this.scene.physics.moveTo(
       shot,
@@ -107,7 +108,19 @@ class Foe extends Phaser.GameObjects.Sprite {
       player.x,
       player.y,
       300
-    );
+    );} else {
+      this.scene.physics.moveTo(
+        shot,
+        this.scene.width+50,
+        this.scene.height + 50,
+        300
+      );
+      this.scene.physics.moveTo(
+        shot.shadow,
+        this.scene.width+50,
+        this.scene.height+50,
+        300
+    );}
   } 
 
   update() {

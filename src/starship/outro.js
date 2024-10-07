@@ -1,6 +1,11 @@
 export default class Outro extends Phaser.Scene {
     constructor() {
         super({ key: "outro" });
+       
+    }
+
+    init(data){
+        this.playersCount = data.playersNumber;
     }
     create() {
         this.width = this.sys.game.config.width;
@@ -9,6 +14,23 @@ export default class Outro extends Phaser.Scene {
         this.center_height = this.height / 2;
         this.introLayer = this.add.layer();
         this.splashLayer = this.add.layer();
+this.createScore();
+        this.showHistory();
+        this.showPlayer();
+        this.input.keyboard.on("keydown-ENTER", this.startSplash, this);
+    }
+    createScore() {
+        if(this.playersCount > 1){
+        this.text = [
+            "Score Player 1: " + this.registry.get("score_player1"),
+            "Score Player 2: " + this.registry.get("score_player2"),
+            "The evil forces among with",
+            "their tyrannical leader GUINXU",
+            "were finally wiped out.",
+            "Thanks to commander Alva",
+            "And the powah of the Plenny Shakes",
+            " - press enter - ",
+        ];} else 
         this.text = [
             "Score: " + this.registry.get("score_player1"),
             "The evil forces among with",
@@ -18,9 +40,6 @@ export default class Outro extends Phaser.Scene {
             "And the powah of the Plenny Shakes",
             " - press enter - ",
         ];
-        this.showHistory();
-        this.showPlayer();
-        this.input.keyboard.on("keydown-ENTER", this.startSplash, this);
     }
     showHistory() {
         this.text.forEach((line, i) => {
@@ -46,9 +65,18 @@ export default class Outro extends Phaser.Scene {
         });
     }
     showPlayer() {
+        if(this.playersCount > 1){
+            this.player1 = this.add
+            .sprite(this.center_width- 50, this.height - 200, "player1")
+            .setOrigin(0.5);
+            this.player2 = this.add
+            .sprite(this.center_width + 50, this.height - 200, "player2")
+            .setOrigin(0.5);
+
+        }else {
         this.player1 = this.add
             .sprite(this.center_width, this.height - 200, "player1")
-            .setOrigin(0.5);
+            .setOrigin(0.5);}
     }
     startSplash() {
         this.scene.start("splash");

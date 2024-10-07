@@ -8,7 +8,9 @@ class Player extends Phaser.GameObjects.Sprite {
         scene,
         x, y,
         name = "player1",
-        powerUp = "water"
+        powerUp = "water",
+        hp = 3,
+        life = 2,
     ) {
         super(scene, x, y, name);
         this.signalEvent = Array();
@@ -33,8 +35,36 @@ class Player extends Phaser.GameObjects.Sprite {
             left: [() => this.y, () => this.x - 400],
             right: [() => this.y, () => this.x + 400],
         };
-        this.hp = 3;
+        this.hp = hp;
+        this.life = life;
         this.addHpCounter();
+        this.addLifeCounter();
+    }
+
+    addLifeCounter() {
+        this.lifeCounter = this.scene.add
+        .bitmapText(
+            175,
+            165,
+            "wendy",
+            String(this.life),
+            50
+        )
+        .setOrigin(0.5)
+        .setScrollFactor(0);
+    }
+
+    addTextForHpLife(x,y,text) {
+       return this.scene.add
+            .bitmapText(
+                x,
+                y,
+                "wendy",
+                String(text),
+                50
+            )
+            .setOrigin(0.5)
+            .setScrollFactor(0);
     }
 
     addHpCounter() {
@@ -178,6 +208,7 @@ class Player extends Phaser.GameObjects.Sprite {
     update(timestep, delta) {
         if (this.death) return;
         this.hpCounterBar.setText(this.hp);
+        this.lifeCounter.setText(this.life);
         if (this.signalEvent.length > 0) {
             this.dash();
         }
@@ -242,6 +273,7 @@ class Player extends Phaser.GameObjects.Sprite {
             },
         });
         this.hpCounterBar.destroy();
+        this.lifeCounter.destroy();
         this.scene.cameras.main.shake(500);
         this.death = true;
         this.shadow.destroy();

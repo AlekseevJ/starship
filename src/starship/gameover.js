@@ -1,6 +1,10 @@
 export default class Outro extends Phaser.Scene {
     constructor() {
         super({ key: "gameover" });
+        
+    }
+    init(data) {
+        this.playersCount = data.playerCount;
     }
     create() {
         this.width = this.sys.game.config.width;
@@ -41,8 +45,16 @@ export default class Outro extends Phaser.Scene {
         });
     }
     showPlayer() {
+        if(this.playersCount > 1){
+            this.player1 = this.add
+            .sprite(this.center_width- 50, this.height - 200, "player1")
+            .setOrigin(0.5);
+            this.player2 = this.add
+            .sprite(this.center_width + 50, this.height - 200, "player2")
+            .setOrigin(0.5);
+        } else{
         this.player1 = this.add
             .sprite(this.center_width, this.height - 200, "player1")
-            .setOrigin(0.5);
+            .setOrigin(0.5);}
     }
 }
