@@ -224,10 +224,10 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         } else {
             if (Math.abs(this.body.velocity.x) < this.maxVelocity) {
-                if(Math.abs(x) != Math.abs(this.body.velocity.x)){
-                    this.body.setVelocityX(this.body.velocity.x + 2*x);
-                }else
-                this.body.setVelocityX(this.body.velocity.x + x);
+                if (Math.abs(x) != Math.abs(this.body.velocity.x)) {
+                    this.body.setVelocityX(this.body.velocity.x + 2 * x);
+                } else
+                    this.body.setVelocityX(this.body.velocity.x + x);
             }
         }
     }
@@ -249,18 +249,19 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         } else {
             if (Math.abs(this.body.velocity.y) < this.maxVelocity) {
-                if(Math.sign(y) != Math.sign(this.body.velocity.y) && Math.sign(this.body.velocity.y) != 0) {
-                this.setRealVelocityY(this.body.velocity.y + (y*5));
-                }else{
-                this.setRealVelocityY(this.body.velocity.y + y);}
+                if (Math.sign(y) != Math.sign(this.body.velocity.y) && Math.sign(this.body.velocity.y) != 0) {
+                    this.setRealVelocityY(this.body.velocity.y + (y * 5));
+                } else
+                    this.setRealVelocityY(this.body.velocity.y + y);
             }
         }
     }
 
     setRealVelocityY(realVelocity) {
-        if(Math.abs(realVelocity) > this.maxVelocity){
-        this.body.setVelocityY(Math.sign(realVelocity)*this.maxVelocity);
-    } else  this.body.setVelocityY(realVelocity);
+        if (Math.abs(realVelocity) > this.maxVelocity)
+            this.body.setVelocityY(Math.sign(realVelocity) * this.maxVelocity);
+        else
+            this.body.setVelocityY(realVelocity);
     }
 
     update(timestep, delta) {
@@ -283,14 +284,14 @@ class Player extends Phaser.GameObjects.Sprite {
             this.shadow.setScale(1, 1);
         }
         this.changeVelocityX();
-        if (this.up.isDown ) {
+        if (this.up.isDown) {
             this.changeVelocityY(-this.stepVelocity);
-        } else if (this.down.isDown ) {
+        } else if (this.down.isDown) {
             this.changeVelocityY(+this.stepVelocity);
         }
-            
+
         this.changeVelocityY();
-       
+
 
         if (Phaser.Input.Keyboard.JustDown(this.SPACE)) {
             this.shoot();

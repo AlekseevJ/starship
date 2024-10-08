@@ -9,6 +9,7 @@ export default class ShootingPatterns {
             fruit: this.tri.bind(this),
             vanila: this.quintus.bind(this),
             chocolate: this.massacre.bind(this),
+            wiggle: this.wiggle.bind(this),
         };
     }
 
@@ -35,7 +36,7 @@ export default class ShootingPatterns {
 
     massacre(x, y, powerUp) {
        this.oneMassacreShoot(x, y, powerUp);
-       this.oneMassacreShoot(x, y+15, powerUp, 2);
+    //    this.oneMassacreShoot(x, y+15, powerUp, 2);
     }
 
     oneMassacreShoot(x, y, powerUp, rectangle = 1) {
@@ -44,5 +45,22 @@ export default class ShootingPatterns {
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name));
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, 30* rectangle));
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, -30 * rectangle));
+    }
+
+    wiggle(x, y, powerUp) {
+        let shot = new Shot(this.scene, x, y, powerUp, this.name);
+        shot.eventTweens = this.scene.tweens.add({
+            targets: [shot, shot.shadow],
+            radius: 200,
+            ease: 'Circ.easeIn',
+            duration: 500,
+            yoyo: true,
+            // onUpdate: function ()
+            // {
+            //     if(shot.active && shot.shadow.active) {
+            //     Phaser.Actions.RotateAroundDistance(shot, { x: shot.x, y: shot.y }, 0.02, 50);}
+            // }
+        });
+    
     }
 }

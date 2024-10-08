@@ -30,6 +30,8 @@ class Foe extends Phaser.GameObjects.Sprite {
       this.setGuinxuShot();
     }
     this.init();
+    this.guinxuShotCounter = 1;
+    this.guinxuRandShotParam = 6;
   }
 
   setSizeFoe(name) {
@@ -135,7 +137,15 @@ class Foe extends Phaser.GameObjects.Sprite {
       this.destroy();
     }
 
-    if (this.name === "guinxu" && Phaser.Math.Between(1, 6) > 5) {
+    if (this.name === "guinxu" && Phaser.Math.Between(1, this.guinxuRandShotParam) > this.guinxuRandShotParam -1) {
+      if(this.guinxuShotCounter % 500 == 0){
+        this.guinxuRandShotParam = 100;
+        this.guinxuShotCounter = 1;
+        //todo добавить звук поломки гуинксу
+
+         this.scene.time.delayedCall(3000, () => this.guinxuRandShotParam = 6, null, this)
+        };
+        this.guinxuShotCounter++;
       this.guinxuShot();
     } else if (this.name === "sultan" && Phaser.Math.Between(1, 55) > 54) {
       if (!this.scene || !this.scene.player) return;

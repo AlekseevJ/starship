@@ -5,6 +5,8 @@ const TYPES = {
     water: { color: 0xffffff, radius: 16, intensity: 0.4 },
     foe: { color: 0x00ff00, radius: 16, intensity: 0.4 },
     sultan: { color: 0x0000ff, radius: 16, intensity: 0.4 },
+    wiggle: {color: 0x331144, radius: 16, intensity: 0.4 },
+    
 };
 
 class Shot extends Phaser.GameObjects.PointLight {

@@ -29,6 +29,7 @@ export default class FoeGenerator {
 
     generate() {
         // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
+        // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this); return;
         if (this.scene.number === 4) {
             this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this);
         } else {
@@ -36,7 +37,7 @@ export default class FoeGenerator {
                 {
                     delay: 1300,
                     callback: () => {
-                        if (this.waves < 3) {
+                        if (this.waves < 5) {
                             if (this.foeCount < 10) {
                                 this.generateManager();
                             }
@@ -52,8 +53,6 @@ export default class FoeGenerator {
             );
         }
     }
-
-
 
     generateManager() {
         this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.orderedWave(), null, this);
@@ -179,7 +178,7 @@ export default class FoeGenerator {
 
         this.path.lineTo(start, Phaser.Math.Between(20, 50));
 
-        let max = 44;
+        let max = 18;
         let h = 500 / max;
 
         for (let i = 0; i < h; i++) {
@@ -329,7 +328,6 @@ export default class FoeGenerator {
             if (this.activeWave && this.checkIfWaveDestroyed()) {
 
                 this.activeWave = false;
-                this.scene.spawnShake();
                 this.path.destroy();
             }
 
