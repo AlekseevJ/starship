@@ -5,8 +5,8 @@ const TYPES = {
   foe0: { points: 400, lives: 1, circle: 19, offestX: 12 },
   foe1: { points: 500, lives: 3, circle: 19, offestX: 12 },
   foe2: { points: 800, lives: 2, circle: 19, offestX: 12 },
-  sultan: { points: 1500, lives: 10, circle: 45, offestX: 40 },
-  guinxu: { points: 10000, lives: 20, circle: 19, offestX: 12 },
+  sultan: { points: 1500, lives: 80, circle: 45, offestX: 40 },
+  guinxu: { points: 10000, lives: 100, circle: 19, offestX: 12 },
 };
 
 class Foe extends Phaser.GameObjects.Sprite {
@@ -159,7 +159,7 @@ class Foe extends Phaser.GameObjects.Sprite {
     }
 
 
-    else if (Phaser.Math.Between(1, 101) > 100) {
+    else if (Phaser.Math.Between(1, 251) > 250) {
       if (!this.scene || !this.scene.player) return;
       this.scene.playAudio("foeshot");
       let shot = new FoeShot(this.scene, this.x, this.y, "foe", this.name);

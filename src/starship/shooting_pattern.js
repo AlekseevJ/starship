@@ -30,8 +30,8 @@ export default class ShootingPatterns {
     quintus(x, y, powerUp) {
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, -30));
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, 30));
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, 60));
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, -60));
+        this.scene.shots.add(new Shot(this.scene, x+15, y, powerUp, this.name, 60));
+        this.scene.shots.add(new Shot(this.scene, x-15, y, powerUp, this.name, -60));
     }
 
     massacre(x, y, powerUp) {
@@ -40,11 +40,11 @@ export default class ShootingPatterns {
     }
 
     oneMassacreShoot(x, y, powerUp, rectangle = 1) {
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, -10* rectangle));
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, 10 * rectangle));
+        this.scene.shots.add(new Shot(this.scene, x-15, y, powerUp, this.name, -10* rectangle));
+        this.scene.shots.add(new Shot(this.scene, x+15, y, powerUp, this.name, 10 * rectangle));
         this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name));
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, 30* rectangle));
-        this.scene.shots.add(new Shot(this.scene, x, y, powerUp, this.name, -30 * rectangle));
+        this.scene.shots.add(new Shot(this.scene, x+25, y, powerUp, this.name, 30* rectangle));
+        this.scene.shots.add(new Shot(this.scene, x-25, y, powerUp, this.name, -30 * rectangle));
     }
 
     wiggle(x, y, powerUp) {

@@ -20,6 +20,7 @@ const config = {
         arcade: {
             gravity: { y: 0 },
             debug: false,
+            fps: 60,
         },
     },
     scene: [Bootloader, Splash, Transition, Game, Outro, GameOver],

@@ -21,14 +21,18 @@ export default class Game extends Phaser.Scene {
     if(this.playersNumber == 1){
     if (this.number === 1) {
       this.registry.set("currentPowerUp" + 'player1', 'water');
-      this.registry.set("currentPowerUp" + 'player2', 'water');
-
     this.registry.set("player1hp",  3);
     this.registry.set("player1life",  2);
-    } else {
-    this.registry.set("player1hp", data.player1hp );
-    this.registry.set("player1life", data.player1life );
-    }
+    } 
+  } else {
+    if (this.number === 1) {
+      this.registry.set("currentPowerUp" + 'player1', 'water');
+      this.registry.set("currentPowerUp" + 'player2', 'water');
+    this.registry.set("player1hp",  3);
+    this.registry.set("player1life",  2);
+    this.registry.set("player2hp",  3);
+    this.registry.set("player2life",  2);
+    } 
   }
     this.volume = { volume: 0.5 };
   }
@@ -52,9 +56,6 @@ export default class Game extends Phaser.Scene {
     this.loadAudios();
     this.addColliders();
   }
-
-
-
   addBackground() {
     this.background = this.add
       .tileSprite(0, 0, this.width, this.height, "stage" + this.number)
@@ -66,8 +67,9 @@ export default class Game extends Phaser.Scene {
   }
 
   spawnShake(x, y) {
-    this.shake = new PowerUp(this, x, y);
-    this.powerUps.add(this.shake);
+    let shake = new PowerUp(this, x, y);
+    this.powerUps.add(shake);
+    this.time.delayedCall(7000, () => {this.powerUps.remove(shake); shake.destroy()}, null, this)
   }
 
 
@@ -97,13 +99,23 @@ export default class Game extends Phaser.Scene {
   addPlayers() {
     this.trailLayer = this.add.layer();
     this.players = this.add.group();
-    this.player = new Player(this, this.center_width, this.center_height, 
-      'player1', this.registry.get("currentPowerUp" + 'player1'), this.registry.get('player1hp'), this.registry.get('player1life'));
+    this.player = new Player(this, 
+      this.center_width, 
+      this.center_height, 
+      'player1', 
+      this.registry.get("currentPowerUp" + 'player1'), 
+      this.registry.get('player1hp'), 
+      this.registry.get('player1life'));
     this.players.add(this.player);
 
     if (this.playersNumber > 1) {
-      this.player2 = new Player(this, this.center_width - 10, this.center_height - 10, 
-        'player2', this.registry.get("currentPowerUp" + 'player2'));
+      this.player2 = new Player(this, 
+        this.center_width - 10, 
+        this.center_height - 10, 
+        'player2', 
+        this.registry.get("currentPowerUp" + 'player2'),
+        this.registry.get('player2hp'), 
+        this.registry.get('player2life'));
       this.players.add(this.player2);
     }
 
@@ -122,7 +134,7 @@ export default class Game extends Phaser.Scene {
   }
 
   addPowerUps() {
-    this.available = ["fruit", "vanila", "chocolate"];
+    this.available = ["water","fruit", "vanila", "chocolate"];
     this.powerUps = this.add.group();
   }
 
@@ -202,6 +214,8 @@ export default class Game extends Phaser.Scene {
   hitByHpPlayer(player) {
     if (player.blinking === false) {
       player.hp--;
+      this.downPowerUp(player);
+      player.hpCounterBar.setText(player.hp);
       this.playAudio('playerhit');
       this.registry.set(player.name+"hp",  player.hp);
       this.player.blinking = true;
@@ -216,11 +230,10 @@ export default class Game extends Phaser.Scene {
       });
       if (player.hp == 0) {
         player.life--;
+        player.lifeCounter.setText(player.life);
         
         if(player.life < 0){
-
         this.players.remove(player);
-
         player.dead();
         this.playAudio("explosion");
           if(this.players.countActive() <= 0){
@@ -232,7 +245,8 @@ export default class Game extends Phaser.Scene {
             null,
             this
           );
-        }} else {
+        }
+      } else {
         this.registry.set(player.name + "life",  player.life);
         this.players.remove(player);
         this.time.delayedCall(
@@ -352,9 +366,10 @@ export default class Game extends Phaser.Scene {
     this.registry.set(name+'hp', 3);
     this.registry.set("currentPowerUp" + name, 'water');
     if (name == "player2") {
-      this.player2 = new Player(this, this.center_width, this.center_height, name);
+      this.player2 = new Player(this, this.center_width, this.center_height, name, 'water', 
+        this.registry.get(name+'hp'), this.registry.get(name+'life'));
       this.player2.blinking = true;
-      this.players.add(this.player);
+      this.players.add(this.player2);
       this.tweens.add({
         targets: this.player2,
         duration: 100,
@@ -462,6 +477,13 @@ export default class Game extends Phaser.Scene {
     } else {
       this.updateScore(player.name, 5000);
     }
+  }
+  downPowerUp(player, powerUp) {
+    let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1;
+    if (lvlUp  > 1) {
+      player.powerUp = this.available[lvlUp-2]; console.log(player.powerUp);
+      this.registry.set("currentPowerUp" + player.name, player.powerUp);
+    } 
   }
 
   updateScore(playerName, points = 0) {

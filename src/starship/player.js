@@ -44,16 +44,30 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     addLifeCounter() {
-        this.lifeCounter = this.scene.add
-            .bitmapText(
-                175,
-                165,
-                "wendy",
-                String(this.life),
-                50
-            )
-            .setOrigin(0.5)
-            .setScrollFactor(0);
+            if (this.name == 'player1') {
+                this.lifeCounter = this.scene.add
+                .bitmapText(
+                    175,
+                    165,
+                    "wendy",
+                    String(this.life),
+                    50
+                )
+                .setOrigin(0.5)
+                .setScrollFactor(0);
+            }
+            else {
+                this.lifeCounter = this.scene.add
+                    .bitmapText(
+                        this.scene.width - 175,
+                        165,
+                        "wendy",
+                        String(this.life),
+                        50
+                    )
+                    .setOrigin(0.5)
+                    .setScrollFactor(0);
+            }
     }
 
     addTextForHpLife(x, y, text) {
@@ -224,9 +238,6 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         } else {
             if (Math.abs(this.body.velocity.x) < this.maxVelocity) {
-                if (Math.abs(x) != Math.abs(this.body.velocity.x)) {
-                    this.body.setVelocityX(this.body.velocity.x + 2 * x);
-                } else
                     this.body.setVelocityX(this.body.velocity.x + x);
             }
         }
@@ -266,11 +277,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update(timestep, delta) {
         if (this.death) return;
-        this.hpCounterBar.setText(this.hp);
-        this.lifeCounter.setText(this.life);
         if (this.signalEvent.length > 0) {
             this.dash();
         }
+
         if (this.left.isDown) {
             this.changeVelocityX(-this.stepVelocity);
             this.anims.play(this.name + "left", true);
@@ -289,7 +299,6 @@ class Player extends Phaser.GameObjects.Sprite {
         } else if (this.down.isDown) {
             this.changeVelocityY(+this.stepVelocity);
         }
-
         this.changeVelocityY();
 
 
