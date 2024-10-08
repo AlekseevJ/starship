@@ -188,10 +188,10 @@ export default class FoeGenerator {
             new Foe(
                 this.scene,
                 Phaser.Math.Between(100, 600),
-                -100,
+                -50,
                 "foe2",
                 0,
-                620
+                470
             )
         );
 
@@ -247,10 +247,10 @@ export default class FoeGenerator {
             new Foe(
                 this.scene,
                 x + i * 70,
-                i * y + offset,
+                i * y + offset - 100,
                 "foe0",
                 0,
-                300
+                200
             )
         );
 

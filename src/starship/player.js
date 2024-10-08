@@ -39,7 +39,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.life = life;
         this.addHpCounter();
         this.addLifeCounter();
-        this.maxVelocity = 800;
+        this.maxVelocity = 300;
         this.stepVelocity = 100;
     }
 

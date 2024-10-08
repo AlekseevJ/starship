@@ -36,8 +36,8 @@ export default class Splash extends Phaser.Scene {
     }
 
     update() {
-        this.background.tilePositionY -= 10;
-        this.background.tilePositionx += 10;
+        this.background.tilePositionY -= 2;
+        this.background.tilePositionX += 2;
     }
 
     transitionToChange(players) {
