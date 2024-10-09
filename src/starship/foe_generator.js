@@ -27,7 +27,7 @@ export default class FoeGenerator {
             .setScrollFactor(0);
     }
 
-    generate() {
+    generate() { 
         // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
         // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this); return;
         if (this.scene.number === 4) {
@@ -35,7 +35,7 @@ export default class FoeGenerator {
         } else {
             this.masterGenerator = this.scene.time.addEvent(
                 {
-                    delay: 1300,
+                    delay: 5000,
                     callback: () => {
                         if (this.waves < 5) {
                             if (this.foeCount < 10) {
@@ -55,14 +55,14 @@ export default class FoeGenerator {
     }
 
     generateManager() {
-        this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.orderedWave(), null, this);
-        this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.orderedWave(), null, this);
+         this.orderedWave();
+          this.orderedWave(5, 400);
         // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this);
         if (this.scene.number > 1)
-            this.scene.time.delayedCall(2000, () => this.tank(), null, this);
+             this.tank();
         if (this.scene.number > 2)
-            this.scene.time.delayedCall(2000, () => this.slider(), null, this);
-        if(Phaser.Math.Between(1,6) >5){this.waves++;}
+           this.slider();
+        if(Phaser.Math.Between(1,6) >3){this.waves++;}
     }
 
     spawnSultan() {
@@ -173,9 +173,9 @@ export default class FoeGenerator {
         this.scene.endScene();
     }
 
-    orderedWave(difficulty = 5) {
+    orderedWave(difficulty = 5, startY = 0) {
         const x = Phaser.Math.Between(64, this.scene.width - 200);
-        const y = Phaser.Math.Between(-100, 0);
+        const y = Phaser.Math.Between(-100, 0) - startY;
         const minus = Phaser.Math.Between(-1, 1) > 0 ? 1 : -1;
 
         Array(difficulty)
