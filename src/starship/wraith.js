@@ -2,7 +2,7 @@ import FoeShot from "./foe_shot";
 import Explosion from "./explosion";
 
 const TYPES = {
-    wraith: { points: 3000, lives: 60, circle: 30, offestX: 12 },
+    wraith: { points: 3000, lives: 21, circle: 30, offestX: 12 },
 };
 
 class Wraith extends Phaser.GameObjects.Sprite {
@@ -274,23 +274,24 @@ class Wraith extends Phaser.GameObjects.Sprite {
         this.scene.time.delayedCall(
             0,
             () => {
-                this.movementTo(200 - razbros, 200 - razbros, 2000);
+                if(this.active) {
+                this.movementTo(200 - razbros, 200 - razbros, 2000);}
             },
             null,
             this
         );
         this.scene.time.delayedCall(
             2100,
-            () => {
-                this.movementTo(this.scene.width - 90 - razbros, 150 - razbros, 2000);
+            () => {if(this.active) {
+                this.movementTo(this.scene.width - 90 - razbros, 150 - razbros, 2000);}
             },
             null,
             this
         );
         this.scene.time.delayedCall(
             4150,
-            () => {
-                this.movementTo(this.scene.center_width + 200 - razbros, 450 - razbros, 2000);
+            () => {if(this.active) {
+                this.movementTo(this.scene.center_width + 200 - razbros, 450 - razbros, 2000);}
             },
             null,
             this
@@ -315,7 +316,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
                 10,
                 time
             );
-            this.scene.time.delayedCall(time+10, () => { this.body.setVelocityX(0); this.body.setVelocityY(0); }, null, this);
+            this.scene.time.delayedCall(time+10, () => { if(this.active){this.body.setVelocityX(0); this.body.setVelocityY(0);} }, null, this);
         }
     }
 
@@ -330,11 +331,11 @@ class Wraith extends Phaser.GameObjects.Sprite {
 
     update() {
 
-        if (this.lives <= 20 && this.booster === true) {
-            this.lives = 40;
-            this.rage();
-            this.booster = false;
-        }
+        // if (this.lives <= 20 && this.booster === true) {
+        //     this.lives = 40;
+        //     this.rage();
+        //     this.booster = false;
+        // }
         if (this.counter == 0) {
             this.counter++
             this.movementManager();;
@@ -374,7 +375,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
             this.shadow.destroy();
 
         this.scene.playAudio("explosion");
-        this.scene.endScene();
+        this.scene.endScene(1);
 
         this.scene.foes.foeCount--;
         this.scene.spawnShake(this.x, this.y);

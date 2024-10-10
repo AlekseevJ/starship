@@ -6,6 +6,7 @@ const TYPES = {
     foe: { color: 0xfff01f, radius: 16, intensity: 0.4 },
     sultan: { color: 0x0000ff, radius: 16, intensity: 0.4 },
     wraith: { color: 0xffffff, radius: 20, intensity: 0.4},
+    barrier: { color: 0xfff01f, radius: 45, intensity: 0.4 },
 };
 
 class FoeShot extends Phaser.GameObjects.PointLight {

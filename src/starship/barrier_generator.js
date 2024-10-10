@@ -1,6 +1,6 @@
-import Foe from "./foe";import Wraith from "./wraith";
+import FoeShot from './foe_shot';
 
-export default class FoeGenerator {
+export default class BarrierGenerator {
     constructor(scene) {
         this.scene = scene;
         this.waveFoes = [];
@@ -11,24 +11,94 @@ export default class FoeGenerator {
         // this.addFoeCounter();
         this.eventCounter = 0;
         this.markSultan = false;
-
+        this.distance = 0;
+        this.addTimerCounter();
+        this.addDistanceMeter();
+        this.generateBarriers();
     }
 
-    addFoeCounter() {
-        this.foeCounter = this.scene.add
-            .bitmapText(
-                150,
-                160,
-                "wendy",
-                String(this.foeCount),
-                50
-            )
-            .setOrigin(0.5)
-            .setScrollFactor(0);
+
+    generateBarriers() {
+        
+        this.scene.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                let c =Phaser.Math.Between(1,15);
+                for(let i =0; i<c; i++) {
+                this.generateBarrier();}
+            },
+            loop: true
+        });
     }
 
-    generate() { 
-        // this.scene.time.delayedCall(2000, () => this.spawnWraith(), null, this); return;
+    generateBarrier() {
+        const x = Phaser.Math.Between(25, this.scene.width-25);
+        const barrier = new FoeShot(this.scene, x, 50, 'barrier', 'foe0');
+        this.scene.barrierGroup.add(barrier)
+        this.scene.physics.moveTo(
+            barrier,
+            x,
+            this.scene.height+200,
+            300*this.scene.distanceIncrement
+        );
+        barrier.shadow.destroy();
+    }
+
+
+
+    addTimerCounter() {
+        this.timeLeft = 90;
+        this.timerText = this.scene.add.text(this.scene.center_width - 35, 20, `${this.timeLeft}`, {
+            font: '32px Arial',
+            fill: '#ffffff'
+        });
+        this.timerEvent = this.scene.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.timeLeft--;
+                this.timerText.setText(`${this.timeLeft}`);
+                if (this.timeLeft <= 0) {
+                    this.timerText.setText('Time is up!');
+                    this.timerEvent.destroy();
+                    this.scene.gameOverSceneAtomic();
+                }
+            },
+            loop: true
+        });
+    }
+
+    addDistanceMeter() {
+        this.phoneBar = this.scene.add.graphics();
+        this.phoneBar.fillStyle(0x000000, 1);
+        this.phoneBar.fillRect(10, 100, 200, 20);
+        this.progressBar = this.scene.add.graphics();
+        this.progressBar.fillStyle(0xff0000, 1);
+        this.progressBar.fillRect(10, 100, 200, 20);
+        this.distanceEvent = this.scene.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.distance += this.scene.distanceIncrement;
+                this.updateProgressBar();
+                if (this.distance > 120) {
+                    this.timerEvent.destroy(); 
+                    this.distanceEvent.destroy();
+                    this.scene.endScene();
+                }
+            },
+            loop: true
+        });
+    }
+
+    updateProgressBar() {
+        const barWidth = 200;
+        const fillWidth = (this.distance / 120) * barWidth;
+        this.progressBar.clear();
+        this.progressBar.fillStyle(0xff0000, 1);
+        this.progressBar.fillRect(10, 100, fillWidth, 20);
+    }
+
+    generate() {
+        return;
         // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
         // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this); return;
         if (this.scene.number === 4) {
@@ -43,11 +113,11 @@ export default class FoeGenerator {
                                 this.generateManager();
                             }
                         } else if (this.foeCount == 0)
-                            if (this.scene.number === 1 ) {
+                            if (this.scene.number === 1) {
                                 this.spawnSultan();
                                 this.masterGenerator.destroy();
-                            } 
-                            else if(this.scene.number === 2){
+                            }
+                            else if (this.scene.number === 2) {
                                 this.spawnWraith();
                                 this.masterGenerator.destroy();
                             }
@@ -61,14 +131,14 @@ export default class FoeGenerator {
     }
 
     generateManager() {
-         this.orderedWave();
-          this.orderedWave(5, 400);
+        this.orderedWave();
+        this.orderedWave(5, 400);
         // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this);
         if (this.scene.number > 1)
-             this.tank();
+            this.tank();
         if (this.scene.number > 2)
-           this.slider();
-        if(Phaser.Math.Between(1,6) >3){this.waves++;}
+            this.slider();
+        if (Phaser.Math.Between(1, 6) > 3) { this.waves++; }
     }
 
     spawnWraith() {
@@ -77,7 +147,7 @@ export default class FoeGenerator {
             {
                 delay: 200,
                 callback: () => {
-                    this.scene.sound.get('music2').stop();
+                    this.scene.sound.get('music1').stop();
                 },
                 callbackScope: this,
                 loop: false,
@@ -207,10 +277,6 @@ export default class FoeGenerator {
     }
 
 
-    finishScene() {
-        this.masterGenerator.destroy();
-        this.scene.endScene();
-    }
 
     orderedWave(difficulty = 5, startY = 0) {
         const x = Phaser.Math.Between(64, this.scene.width - 200);
@@ -284,7 +350,7 @@ export default class FoeGenerator {
         this.scene.foeGroup.add(
             new Foe(
                 this.scene,
-                (x + i * 70 <= this.scene.width) ?  x + i * 70 : Phaser.Math.Between(30 , this.scene.width- 30),
+                (x + i * 70 <= this.scene.width) ? x + i * 70 : Phaser.Math.Between(30, this.scene.width - 30),
                 i * y + offset - 100,
                 "foe0",
                 0,

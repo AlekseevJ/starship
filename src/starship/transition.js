@@ -10,6 +10,7 @@ export default class Transition extends Phaser.Scene {
         this.players = data.players;
         this.player1hp = data.player1hp;
         this.player1life = data.player1life;
+        this.atomic = data.atomic;
     }
 
     create() {
@@ -28,6 +29,7 @@ export default class Transition extends Phaser.Scene {
         this.height = this.sys.game.config.height;
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
+        if(!this.atomic){
         this.sound.add("stageclear2").play();
         this.add
             .bitmapText(
@@ -49,6 +51,39 @@ export default class Transition extends Phaser.Scene {
             .setOrigin(0.5);
         this.playMusic("music" + (this.number !== 4 ? this.number : 1));
         this.time.delayedCall(2000, () => this.loadNext(), null, this);
+    } else {
+        this.add
+            .bitmapText(
+                this.center_width,
+                this.center_height - 50,
+                "wendy",
+                'Atomic Run',
+                150
+            )
+            .setOrigin(0.5);
+        this.add
+            .bitmapText(
+                this.center_width,
+                this.center_height + 50,
+                "wendy",
+                readyText,
+                80
+            )
+            .setOrigin(0.5);
+        this.playMusic('atomic_run');
+        this.time.delayedCall(2000, () => this.loadAtomic(), null, this);
+    }
+    }
+    loadAtomic(){
+        this.scene.start(this.next, {
+            name: this.name,
+            number: this.number,
+            time: this.time,
+            players: this.players,
+            player1hp: this.player1hp,
+            player1life: this.player1life,
+            atomic: true,
+        });
     }
 
     loadNext() {

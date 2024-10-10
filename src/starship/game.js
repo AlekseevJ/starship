@@ -2,6 +2,8 @@ import FoeGenerator from './foe_generator';
 import Player from './player';
 import PowerUp from './power_up';
 import SceneEffect from './scene_effect';
+import PlayerEvent from './player_event';
+import BarrierGenerator from "./barrier_generator";
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -17,6 +19,7 @@ export default class Game extends Phaser.Scene {
     this.number = data.number;
     this.next = data.next;
     this.playersNumber = data.players;
+    this.atomic = data.atomic ? data.atomic : false;
     if(this.playersNumber == 1){
     if (this.number === 1) {
       this.registry.set("currentPowerUp" + 'player1', 'water');
@@ -37,6 +40,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    if(!this.atomic){
     this.duration = this.time * 1000;
     this.width = this.sys.game.config.width;
     this.height = this.sys.game.config.height;
@@ -54,11 +58,47 @@ export default class Game extends Phaser.Scene {
     this.addShots();
     this.loadAudios();
     this.addColliders();
+    this.tilePosition = 10
     this.spawnShake(150,150);
-    
     this.spawnShake(250,150);
     this.spawnShake(350,150);
     this.spawnShake(450,150);
+    } else {
+      this.foeGroup = this.add.group();
+      this.duration = this.time * 1000;
+    this.width = this.sys.game.config.width;
+    this.height = this.sys.game.config.height;
+    this.center_width = this.width / 2;
+    this.center_height = this.height / 2;
+    new SceneEffect(this).simpleOpen(() => 0);
+    this.addBackgroundAtomic();
+    this.cameras.main.setBackgroundColor(0x333333);
+    this.lights.enable();
+    this.lights.setAmbientColor(0x666666);
+    
+    this.tilePosition = 20;
+    this.addScores();
+    this.addPowerUps();
+    this.addPlayersEvent();
+    this.addShots();
+    this.loadAudios();
+    this.initBarierGenerator();
+    this.distanceIncrement = 1;
+    this.addCollidersAtomic();
+    }
+  }
+
+  initBarierGenerator() {
+    this.barrierGroup = this.add.group();
+    new BarrierGenerator(this);
+  }
+
+  addBackgroundAtomic() {
+    this.background = this.add
+      .tileSprite(0, 0, this.width, this.height, "stage_atomic")
+      .setOrigin(0)
+      .setScrollFactor(0, 1)
+      ;
   }
   addBackground() {
     this.background = this.add
@@ -98,7 +138,29 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0.5)
       .setScrollFactor(0);
   }
+  addPlayersEvent(){
+    this.trailLayer = this.add.layer();
+    this.players = this.add.group();
+    this.player = new PlayerEvent(this, 
+      this.center_width, 
+      this.center_height+280, 
+      'player1', 
+      this.registry.get("currentPowerUp" + 'player1'), 
+      this.registry.get('player1hp'), 
+      this.registry.get('player1life'));
+    this.players.add(this.player);
 
+    if (this.playersNumber > 1) {
+      this.player2 = new PlayerEvent(this, 
+        this.center_width + 70, 
+        this.center_height +280, 
+        'player2', 
+        this.registry.get("currentPowerUp" + 'player2'),
+        this.registry.get('player2hp'), 
+        this.registry.get('player2life'));
+      this.players.add(this.player2);
+    }
+  }
 
   addPlayers() {
     this.trailLayer = this.add.layer();
@@ -141,7 +203,19 @@ export default class Game extends Phaser.Scene {
     this.available = ["water","fruit", "vanila", "chocolate"];
     this.powerUps = this.add.group();
   }
-
+  addCollidersAtomic() {
+    this.physics.add.collider(
+      this.players,
+      this.barrierGroup,
+      this.hitPlayer,
+      () => {
+        return true;
+      },
+      this
+    );
+    
+    this.physics.world.on("worldbounds", this.onWorldBoundsAtomic);
+  }
   addColliders() {
     this.physics.add.collider(
       this.players,
@@ -216,6 +290,10 @@ export default class Game extends Phaser.Scene {
   }
 
   hitByHpPlayer(player) {
+    if(this.atomic){
+      if(this.distanceIncrement > 1)
+      this.distanceIncrement--;
+    }
     if (player.blinking === false) {
       player.hp--;
       this.downPowerUp(player);
@@ -244,7 +322,9 @@ export default class Game extends Phaser.Scene {
           this.time.delayedCall(
             2000,
             () => {
-              this.gameOverScene();
+              if(!this.atomic){
+              this.gameOverScene();}
+              else this.gameOverSceneAtomic();
             },
             null,
             this
@@ -272,7 +352,12 @@ export default class Game extends Phaser.Scene {
       }
     }
   }
-
+  onWorldBoundsAtomic(body, t) {
+    const name = body.gameObject.name.toString();
+    if (["foeshot", "shot"].includes(name)) {
+      body.gameObject.destroy();
+    }
+  }
   onWorldBounds(body, t) {
     const name = body.gameObject.name.toString();
     if (["foeshot", "shot"].includes(name)) {
@@ -374,12 +459,23 @@ export default class Game extends Phaser.Scene {
     powerUp.destroy();
   }
 
+  boost()
+  {
+    if( this.distanceIncrement < 3){
+    this.distanceIncrement++;}
+  }
   respawnPlayer(name) {
     this.registry.set(name+'hp', 3);
     this.registry.set("currentPowerUp" + name, 'water');
     if (name == "player2") {
+      if(!this.atomic){
       this.player2 = new Player(this, this.center_width, this.center_height, name, 'water', 
         this.registry.get(name+'hp'), this.registry.get(name+'life'));
+      } else {
+        this.player2 = new PlayerEvent(this, this.center_width + 70, 
+          this.center_height +280, name, 'water', 
+          this.registry.get(name+'hp'), this.registry.get(name+'life'));
+      }
       this.player2.blinking = true;
       this.players.add(this.player2);
       this.tweens.add({
@@ -392,8 +488,11 @@ export default class Game extends Phaser.Scene {
         },
       });
     } else {
+      if(!this.atomic){
       this.player = new Player(this, this.center_width, this.center_height, name, 'water', 
-        this.registry.get(name+'hp'), this.registry.get(name+'life'));
+        this.registry.get(name+'hp'), this.registry.get(name+'life'));}
+        else this.player = new PlayerEvent(this, this.center_width, this.center_height+280, name, 'water', 
+          this.registry.get(name+'hp'), this.registry.get(name+'life'));
       this.player.blinking = true;
       this.players.add(this.player);
       this.tweens.add({
@@ -435,7 +534,7 @@ export default class Game extends Phaser.Scene {
     if (this.player) this.player.update();
     if (this.player2) this.player2.update();
     this.foes.update();
-    this.background.tilePositionY -= 10;
+    this.background.tilePositionY -= this.tilePosition;
   }
 
   shadowDestroy() {
@@ -443,12 +542,36 @@ export default class Game extends Phaser.Scene {
     this.shots.children.entries.forEach((shot) => shot.shadow.destroy());
     this.foeShots.children.entries.forEach((shot) => shot.shadow.destroy());
   }
-  endScene() {
+  endScene(i = 0) {
+    if(!this.atomic)
     this.shadowDestroy();
+    if(i == 0){
     this.time.delayedCall(
       2000,
       () => {
         this.finishScene();
+      },
+      null,
+      this
+    );}
+else {
+  this.time.delayedCall(
+    2000,
+    () => {
+      this.finishSceneAtomic();
+    },
+    null,
+    this
+  );
+  }
+  }
+  gameOverSceneAtomic() {
+    this.time.delayedCall(
+      2000,
+      () => {
+        this.game.sound.stopAll();
+        this.scene.stop("game");
+        this.scene.start("gameover", {playerCount: this.playersNumber});
       },
       null,
       this
@@ -469,6 +592,21 @@ export default class Game extends Phaser.Scene {
     );
   }
 
+  finishSceneAtomic() {
+    this.game.sound.stopAll();
+    this.scene.stop("game");
+    const scene = this.number < 5 ? "transition" : "outro";
+    this.scene.start(scene, {
+      next: "game",
+      name: "STAGE",
+      number: this.number ,
+      players: this.playersNumber,
+      player1hp: this.player.hp,
+      player1life: this.player.life,
+      atomic: true,
+    });
+  }
+
   finishScene() {
     this.game.sound.stopAll();
     this.scene.stop("game");
@@ -480,6 +618,7 @@ export default class Game extends Phaser.Scene {
       players: this.playersNumber,
       player1hp: this.player.hp,
       player1life: this.player.life,
+      atomic: false,
     });
   }
 

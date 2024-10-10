@@ -2,7 +2,7 @@ import Explosion from "./explosion";
 import { LightParticle } from "./light_particle";
 import ShootingPatterns from "./shooting_pattern";
 
-class Player extends Phaser.GameObjects.Sprite {
+class PlayerEvent extends Phaser.GameObjects.Sprite {
     constructor(
         scene,
         x, y,
@@ -41,6 +41,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.stepVelocity = 300;
         this.addHbBar();
         this.showCurrentPowerUp();
+        this.lightPart = 20;
     }
 
     addHbBar() {
@@ -181,48 +182,12 @@ class Player extends Phaser.GameObjects.Sprite {
             this.SPACE = this.scene.input.keyboard.addKey(
                 Phaser.Input.Keyboard.KeyCodes.SPACE
             );
-            this.cursor = this.scene.input.keyboard.createCursorKeys();
-
+            
             this.up = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.left = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
             this.down = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
             this.right = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
-
-            let lastTimeUp = 0;
-            this.dashUp = this.scene.input.keyboard.on("keydown-UP", () => {
-
-                let clickDelayUp = performance.now() - lastTimeUp;
-                lastTimeUp = performance.now();
-                if (clickDelayUp < 200) {
-                    this.signalEvent.push(['dash', 'up']);
-                }
-
-            });
-            let lastTimeLeft = 0;
-            this.dashLeft = this.scene.input.keyboard.on("keydown-LEFT", () => {
-                let clickDelayLeft = performance.now() - lastTimeLeft;
-                lastTimeLeft = performance.now();
-                if (clickDelayLeft < 200) {
-                    this.signalEvent.push(['dash', 'left']);
-                }
-            });
-            let lastTimeDown = 0;
-            this.dashDown = this.scene.input.keyboard.on("keydown-DOWN", () => {
-                let clickDelayDown = performance.now() - lastTimeDown;
-                lastTimeDown = performance.now();
-                if (clickDelayDown < 200) {
-                    this.signalEvent.push(['dash', 'down']);
-                }
-            });
-            let lastTimeRight = 0;
-            this.dashRight = this.scene.input.keyboard.on("keydown-RIGHT", () => {
-                let clickDelayRight = performance.now() - lastTimeRight;
-                lastTimeRight = performance.now();
-                if (clickDelayRight < 200) {
-                    this.signalEvent.push(['dash', 'right']);
-                }
-            });
         }
         else {
             this.SPACE = this.scene.input.keyboard.addKey(
@@ -236,100 +201,38 @@ class Player extends Phaser.GameObjects.Sprite {
         }
     }
 
-    shoot() {
-        this.scene.playAudio("shot");
-        this.shootingPatterns.shoot(this.x, this.y, this.powerUp);
+    boost()
+    {
+        this.scene.playAudio('dash');
+        this.scene.boost();
     }
 
-    changeVelocityX(x = 0) {
-        if (x == 0) {
-            switch (Math.sign(this.body.velocity.x)) {
-                case 1: {
-                    this.body.setVelocityX(this.body.velocity.x - (this.stepVelocity / 2));
-                    break;
-                }
-                case 0: {
-                    break;
-                }
-                case -1: {
-                    this.body.setVelocityX(this.body.velocity.x + (this.stepVelocity / 2));
-                    break;
-                }
-            }
-        } else {
-            if (Math.abs(this.body.velocity.x) < this.maxVelocity) {
-                    this.body.setVelocityX(this.body.velocity.x + x);
-            }
-        }
-    }
-
-    changeVelocityY(y = 0) {
-        if (y == 0) {
-            switch (Math.sign(this.body.velocity.y)) {
-                case 1: {
-                    this.body.setVelocityY(this.body.velocity.y - (this.stepVelocity / 2));
-                    break;
-                }
-                case 0: {
-                    break;
-                }
-                case -1: {
-                    this.body.setVelocityY(this.body.velocity.y + (this.stepVelocity / 2));
-                    break;
-                }
-            }
-        } else {
-            if (Math.abs(this.body.velocity.y) < this.maxVelocity) {
-                if (Math.sign(y) != Math.sign(this.body.velocity.y) && Math.sign(this.body.velocity.y) != 0) {
-                    this.setRealVelocityY(this.body.velocity.y + (y * 5));
-                } else
-                    this.setRealVelocityY(this.body.velocity.y + y);
-            }
-        }
-    }
-
-    setRealVelocityY(realVelocity) {
-        if (Math.abs(realVelocity) > this.maxVelocity)
-            this.body.setVelocityY(Math.sign(realVelocity) * this.maxVelocity);
-        else
-            this.body.setVelocityY(realVelocity);
-    }
 
     update(timestep, delta) {
         if (this.death) return;
-        if (this.signalEvent.length > 0) {
-            new LightParticle(this.scene, this.x, this.y, 0xff0000, 20);
-            this.dash();
-        }
+       
 
         if (this.left.isDown) {
-            this.changeVelocityX(-this.stepVelocity);
+            this.x = this.x-(2*this.scene.distanceIncrement);
             this.anims.play(this.name + "left", true);
             this.shadow.setScale(0.5, 1);
         } else if (this.right.isDown) {
-            this.changeVelocityX(+this.stepVelocity);
+            this.x = this.x+(2*this.scene.distanceIncrement);
             this.anims.play(this.name + "right", true);
             this.shadow.setScale(0.5, 1);
         } else {
             this.anims.play(this.name, true);
             this.shadow.setScale(1, 1);
         }
-        this.changeVelocityX();
-        if (this.up.isDown) {
-            this.changeVelocityY(-this.stepVelocity);
-        } else if (this.down.isDown) {
-            this.changeVelocityY(+this.stepVelocity);
-        }
-        this.changeVelocityY();
 
 
         if (Phaser.Input.Keyboard.JustDown(this.SPACE)) {
-            this.shoot();
+            this.boost();
         }
 
 
         this.scene.trailLayer.add(
-            new LightParticle(this.scene, this.x, this.y, 0xffffff, 10)
+            new LightParticle(this.scene, this.x, this.y, 0xff0000, this.lightPart*this.scene.distanceIncrement)
         );
         this.updateShadow();
     }
@@ -375,32 +278,7 @@ class Player extends Phaser.GameObjects.Sprite {
         super.destroy();
     }
 
-    penis(action) {
-        return this.actions[action];
-    }
 
-    dash() {
-        let action = this.signalEvent.pop()[1];
-
-        this.blinking = true;
-        this.scene.tweens.add({
-            targets: this,
-            duration: 450,
-            y: { from: this.y, to: this.actions[action][0] },
-            x: { from: this.x, to: this.actions[action][1] },
-            alpha: { from: 0, to: 1 },
-            scale: { from: 0.8, to: 1 },
-            onComplete: () => {
-                this.blinking = false;
-            },
-        });
-        this.updateShadow();
-        this.scene.playAudio("dash");
-        this.signalEvent = Array();
-        return;
-
-
-    }
 }
 
-export default Player;
+export default PlayerEvent;
