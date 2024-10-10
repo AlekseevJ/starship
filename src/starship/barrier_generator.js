@@ -15,6 +15,7 @@ export default class BarrierGenerator {
         this.addTimerCounter();
         this.addDistanceMeter();
         this.generateBarriers();
+        this.distanceMax = 180;
     }
 
 
@@ -79,7 +80,7 @@ export default class BarrierGenerator {
             callback: () => {
                 this.distance += this.scene.distanceIncrement;
                 this.updateProgressBar();
-                if (this.distance > 120) {
+                if (this.distance > this.distanceMax) {
                     this.timerEvent.destroy(); 
                     this.distanceEvent.destroy();
                     this.scene.endScene();
@@ -91,7 +92,7 @@ export default class BarrierGenerator {
 
     updateProgressBar() {
         const barWidth = 200;
-        const fillWidth = (this.distance / 120) * barWidth;
+        const fillWidth = (this.distance / this.distanceMax) * barWidth;
         this.progressBar.clear();
         this.progressBar.fillStyle(0xff0000, 1);
         this.progressBar.fillRect(10, 100, fillWidth, 20);

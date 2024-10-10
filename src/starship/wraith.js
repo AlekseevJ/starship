@@ -2,7 +2,7 @@ import FoeShot from "./foe_shot";
 import Explosion from "./explosion";
 
 const TYPES = {
-    wraith: { points: 3000, lives: 21, circle: 30, offestX: 12 },
+    wraith: { points: 3000, lives: 60, circle: 30, offestX: 12 },
 };
 
 class Wraith extends Phaser.GameObjects.Sprite {
@@ -142,6 +142,13 @@ class Wraith extends Phaser.GameObjects.Sprite {
             5000,
             () => {
                 shootEvent.destroy();
+            },
+            null,
+            this
+        );
+        this.scene.time.delayedCall(
+            9000,
+            () => {
                 this.counter = 0;
             },
             null,

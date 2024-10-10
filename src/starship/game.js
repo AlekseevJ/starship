@@ -63,6 +63,7 @@ export default class Game extends Phaser.Scene {
     this.spawnShake(250,150);
     this.spawnShake(350,150);
     this.spawnShake(450,150);
+    this.distanceIncrement = 1;
     } else {
       this.foeGroup = this.add.group();
       this.duration = this.time * 1000;
@@ -461,7 +462,7 @@ export default class Game extends Phaser.Scene {
 
   boost()
   {
-    if( this.distanceIncrement < 3){
+    if( this.distanceIncrement < 5){
     this.distanceIncrement++;}
   }
   respawnPlayer(name) {
@@ -534,7 +535,7 @@ export default class Game extends Phaser.Scene {
     if (this.player) this.player.update();
     if (this.player2) this.player2.update();
     this.foes.update();
-    this.background.tilePositionY -= this.tilePosition;
+    this.background.tilePositionY -= this.tilePosition * this.distanceIncrement;
   }
 
   shadowDestroy() {
