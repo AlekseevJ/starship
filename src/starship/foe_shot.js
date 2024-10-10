@@ -5,6 +5,7 @@ const TYPES = {
     water: { color: 0x0000cc, radius: 16, intensity: 0.4 },
     foe: { color: 0xfff01f, radius: 16, intensity: 0.4 },
     sultan: { color: 0x0000ff, radius: 16, intensity: 0.4 },
+    wraith: { color: 0xffffff, radius: 20, intensity: 0.4},
 };
 
 class FoeShot extends Phaser.GameObjects.PointLight {
@@ -35,6 +36,7 @@ class FoeShot extends Phaser.GameObjects.PointLight {
     }
 
     spawnShadow(x, y, velocityX, velocityY) {
+        
         this.shadow = this.scene.add
             .circle(x + 20, y + 20, 10, 0x000000)
             .setAlpha(0.4);

@@ -16,7 +16,6 @@ export default class Game extends Phaser.Scene {
     this.name = data.name;
     this.number = data.number;
     this.next = data.next;
-    this.currentPowerUp = +this.registry.get("currentPowerUp");
     this.playersNumber = data.players;
     if(this.playersNumber == 1){
     if (this.number === 1) {
@@ -55,6 +54,11 @@ export default class Game extends Phaser.Scene {
     this.addShots();
     this.loadAudios();
     this.addColliders();
+    this.spawnShake(150,150);
+    
+    this.spawnShake(250,150);
+    this.spawnShake(350,150);
+    this.spawnShake(450,150);
   }
   addBackground() {
     this.background = this.add
@@ -215,17 +219,17 @@ export default class Game extends Phaser.Scene {
     if (player.blinking === false) {
       player.hp--;
       this.downPowerUp(player);
-      player.hpCounterBar.setText(player.hp);
+      player.downHpBar();
       this.playAudio('playerhit');
       this.registry.set(player.name+"hp",  player.hp);
-      this.player.blinking = true;
+      player.blinking = true;
       this.tweens.add({
-        targets: this.player,
+        targets: player,
         duration: 100,
         alpha: { from: 0, to: 1 },
         repeat: 10,
         onComplete: () => {
-          this.player.blinking = false;
+          player.blinking = false;
         },
       });
       if (player.hp == 0) {
@@ -304,11 +308,12 @@ export default class Game extends Phaser.Scene {
       duration: 400,
       scale: { from: 1, to: 0 },
     });
+    if( !foe.name === "wraith"){
     this.tweens.add({
       targets: foe,
       duration: 400,
       tint: { from: 0xffffff, to: 0xff0000 },
-    });
+    });}
     this.updateScore(shot.playerName, 50);
     this.tweens.add({ targets: foe, y: "-=10", yoyo: true, duration: 100 });
 
@@ -344,7 +349,14 @@ export default class Game extends Phaser.Scene {
   crashFoe(player, foe) {
     this.hitByHpPlayer(player);
 
-    if (foe.name === "guinxu") { foe.lives = foe.lives - 5; if (foe.lives < 0) foe.dead(); } else
+    if (foe.name === "guinxu") {
+       foe.lives = foe.lives - 5; if (foe.lives < 0) foe.dead(); 
+      }
+    else if (foe.name === "wraith") 
+    {
+      foe.lives = foe.lives - 1; if (foe.lives < 0) foe.dead();
+    }
+    else
       foe.dead();
   }
 
@@ -410,6 +422,8 @@ export default class Game extends Phaser.Scene {
       sultanarrive: this.sound.add("sultanarrive", this.volume),
       playerhit: this.sound.add('playerhit', this.volume),
       sultan_fight: this.sound.add("sultan_fight", { volume: 0.5, loop: true }),
+      wraith: this.sound.add("wraith", { volume: 0.5, loop: true }),
+      wraithFast: this.sound.add("wraithFast", this.volume),
     };
   }
 
@@ -473,6 +487,7 @@ export default class Game extends Phaser.Scene {
     let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1;
     if (lvlUp + 1 <= this.available.length) {
       player.powerUp = this.available[lvlUp];
+      player.actualCurrentPowerUp();
       this.registry.set("currentPowerUp" + player.name, player.powerUp);
     } else {
       this.updateScore(player.name, 5000);
@@ -481,7 +496,8 @@ export default class Game extends Phaser.Scene {
   downPowerUp(player, powerUp) {
     let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1;
     if (lvlUp  > 1) {
-      player.powerUp = this.available[lvlUp-2]; console.log(player.powerUp);
+      player.powerUp = this.available[lvlUp-2]; 
+      player.actualCurrentPowerUp();
       this.registry.set("currentPowerUp" + player.name, player.powerUp);
     } 
   }

@@ -31,10 +31,10 @@ export default class BootLoader extends Phaser.Scene {
             "progress",
             function (value) {
                 this.progressBar.clear();
-                this.progressBar.fillStyle(0xffffff, 1);
+                this.progressBar.fillStyle(0x0088aa, 1);
                 this.progressBar.fillRect(
-                    this.cameras.main.width / 4 - 2,
-                    this.cameras.main.height / 2 - 18,
+                    this.cameras.main.width / 4,
+                    this.cameras.main.height / 2 - 16,
                     (this.cameras.main.width / 2) * value,
                     16
                 );
@@ -82,6 +82,9 @@ export default class BootLoader extends Phaser.Scene {
         this.load.audio('sultanarrive', "starship/assets/sounds/sultan_arrive2.mp3");
         this.load.audio('sultan_fight', "starship/assets/sounds/sultan_fight.mp3");
         this.load.audio('playerhit', "starship/assets/sounds/playerhit.mp3");
+        this.load.audio('game_over', "starship/assets/sounds/game_over.mp3");
+        this.load.audio('wraith', "starship/assets/sounds/wraith.mp3");
+        this.load.audio('wraithFast', "starship/assets/sounds/wraithFast.mp3");
         
         Array(3)
             .fill(0)
@@ -123,15 +126,30 @@ export default class BootLoader extends Phaser.Scene {
             frameWidth: 166,
             frameHeight: 120,
         });
+        this.load.spritesheet("heart1", "starship/assets/images/heart1.png", {
+            frameWidth: 22,
+            frameHeight: 22,
+        });
+        this.load.spritesheet("heart2", "starship/assets/images/heart2.png", {
+            frameWidth: 22,
+            frameHeight: 22,
+        });
+        this.load.spritesheet("miniplayer1", "starship/assets/images/miniplayer1.png", {
+            frameWidth: 22,
+            frameHeight: 22,
+        });
+        this.load.spritesheet("miniplayer2", "starship/assets/images/miniplayer2.png", {
+            frameWidth: 22,
+            frameHeight: 21,
+        });
+        this.load.spritesheet("wraith", "starship/assets/images/wraith1.png", {
+            frameWidth: 200,
+            frameHeight: 200,
+        });
     }
 
     setRegistry() {
         this.registry.set("score_player1", 0);
-        this.registry.set("power_player1", "water");
-        this.registry.set("lives_player1", 0);
-
         this.registry.set("score_player2", 0);
-        this.registry.set("power_player2", "water");
-        this.registry.set("lives_player2", 0);
     }
 }

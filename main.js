@@ -5,7 +5,7 @@ import Game from "./src/starship/game";
 import Outro from "./src/starship/outro";
 import Bootloader from "./src/starship/bootloader";
 import GameOver from "./src/starship/gameover";
-
+localStorage.clear();
 const config = {
     width: 1000,
     height: 800,

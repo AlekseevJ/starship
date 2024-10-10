@@ -16,6 +16,7 @@ export default class Outro extends Phaser.Scene {
         this.input.keyboard.on("keydown-ENTER", this.startSplash, this);
         this.text = ["Game Over", "Your ship has suffered a catastrophe...", "The End?"];
         this.showText();
+        this.playMusic();
     }
 
     showText() {
@@ -25,6 +26,19 @@ export default class Outro extends Phaser.Scene {
                 null,
                 this
             );
+        });
+    }
+    playMusic(theme = "game_over") {
+        this.theme = this.sound.add(theme);
+        this.theme.stop();
+        this.theme.play({
+            mute: false,
+            volume: 0.2,
+            rate: 1,
+            detune: 0,
+            seek:0,
+            loop: true,
+            delay: 0,
         });
     }
 

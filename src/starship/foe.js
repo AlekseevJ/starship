@@ -7,6 +7,7 @@ const TYPES = {
   foe2: { points: 800, lives: 2, circle: 19, offestX: 12 },
   sultan: { points: 1500, lives: 80, circle: 45, offestX: 40 },
   guinxu: { points: 10000, lives: 100, circle: 19, offestX: 12 },
+  wraith: { points: 3000, lives: 60, circle: 30, offestX: 12},
 };
 
 class Foe extends Phaser.GameObjects.Sprite {
@@ -39,6 +40,8 @@ class Foe extends Phaser.GameObjects.Sprite {
       this.body.setSize(125, 80);
     } else if(name === 'guinxu') {
       this.body.setSize(90, 110);
+    } else if(name === 'wraith') {
+      this.body.setSize(100, 125);
       
     } else {
       this.body.setCircle(TYPES[name].circle);

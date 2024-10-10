@@ -24,7 +24,6 @@ export default class Splash extends Phaser.Scene {
             () => this.transitionToChange(2),
             this,
         );
-
         this.playMusic();
     }
 

@@ -1,4 +1,3 @@
-import { Game } from "phaser";
 import Explosion from "./explosion";
 import { LightParticle } from "./light_particle";
 import ShootingPatterns from "./shooting_pattern";
@@ -37,33 +36,69 @@ class Player extends Phaser.GameObjects.Sprite {
         };
         this.hp = hp;
         this.life = life;
-        this.addHpCounter();
         this.addLifeCounter();
-        this.maxVelocity = 300;
-        this.stepVelocity = 100;
+        this.maxVelocity = 600;
+        this.stepVelocity = 300;
+        this.addHbBar();
+        this.showCurrentPowerUp();
+    }
+
+    addHbBar() {
+        if (this.name === 'player1')
+        this.playerHpBar = [
+            this.scene.add.sprite(100, 50, 'heart1'),
+            this.scene.add.sprite(125, 50, 'heart1'), 
+            this.scene.add.sprite(150, 50, 'heart1')
+        ];
+        else
+        this.playerHpBar = [
+            this.scene.add.sprite(this.scene.width-200, 50, 'heart2'),
+            this.scene.add.sprite(this.scene.width-175, 50, 'heart2'), 
+            this.scene.add.sprite(this.scene.width-150, 50, 'heart2')
+        ];
+    }
+   
+    downHpBar() {
+    this.playerHpBar.pop().destroy();
+    }
+
+    showCurrentPowerUp() {
+        this.currentPowerUpText = this.scene.add.bitmapText(
+            100,
+            62,
+            "wendy",
+            String(this.powerUp),
+            35
+        );
+    }
+
+    actualCurrentPowerUp() {
+        this.currentPowerUpText.setText(String(this.powerUp));
     }
 
     addLifeCounter() {
             if (this.name == 'player1') {
+                this.playerLifeBar = this.scene.add.sprite(175, 50, 'miniplayer1'),
                 this.lifeCounter = this.scene.add
                 .bitmapText(
-                    175,
-                    165,
+                    195,
+                    50,
                     "wendy",
                     String(this.life),
-                    50
+                    35
                 )
                 .setOrigin(0.5)
                 .setScrollFactor(0);
             }
             else {
+                this.playerLifeBar = this.scene.add.sprite(this.scene.width -125, 50, 'miniplayer2'),
                 this.lifeCounter = this.scene.add
                     .bitmapText(
-                        this.scene.width - 175,
-                        165,
+                        this.scene.width - 105,
+                        50,
                         "wendy",
                         String(this.life),
-                        50
+                        35
                     )
                     .setOrigin(0.5)
                     .setScrollFactor(0);
@@ -83,32 +118,7 @@ class Player extends Phaser.GameObjects.Sprite {
             .setScrollFactor(0);
     }
 
-    addHpCounter() {
-        if (this.name == 'player1') {
-            this.hpCounterBar = this.scene.add
-                .bitmapText(
-                    150,
-                    160,
-                    "wendy",
-                    String(this.hp),
-                    50
-                )
-                .setOrigin(0.5)
-                .setScrollFactor(0);
-        }
-        else {
-            this.hpCounterBar = this.scene.add
-                .bitmapText(
-                    this.scene.width - 150,
-                    160,
-                    "wendy",
-                    String(this.hp),
-                    50
-                )
-                .setOrigin(0.5)
-                .setScrollFactor(0);
-        }
-    }
+
 
     spawnShadow(x, y) {
         this.shadow = this.scene.add
@@ -278,6 +288,7 @@ class Player extends Phaser.GameObjects.Sprite {
     update(timestep, delta) {
         if (this.death) return;
         if (this.signalEvent.length > 0) {
+            new LightParticle(this.scene, this.x, this.y, 0xff0000, 20);
             this.dash();
         }
 
@@ -331,6 +342,8 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     dead() {
+        this.currentPowerUpText.destroy();
+        this.playerLifeBar.destroy();
         const explosion = this.scene.add
             .circle(this.x, this.y, 5)
             .setStrokeStyle(40, 0xffffff);
@@ -343,7 +356,6 @@ class Player extends Phaser.GameObjects.Sprite {
                 explosion.destroy();
             },
         });
-        this.hpCounterBar.destroy();
         this.lifeCounter.destroy();
         this.scene.cameras.main.shake(500);
         this.death = true;

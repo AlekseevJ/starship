@@ -1,4 +1,4 @@
-import Foe from "./foe";
+import Foe from "./foe";import Wraith from "./wraith";
 
 export default class FoeGenerator {
     constructor(scene) {
@@ -28,6 +28,7 @@ export default class FoeGenerator {
     }
 
     generate() { 
+        this.scene.time.delayedCall(2000, () => this.spawnWraith(), null, this); return;
         // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
         // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this); return;
         if (this.scene.number === 4) {
@@ -65,6 +66,39 @@ export default class FoeGenerator {
         if(Phaser.Math.Between(1,6) >3){this.waves++;}
     }
 
+    spawnWraith() {
+        this.scene.playAudio("wraith");
+        this.scene.time.addEvent(
+            {
+                delay: 200,
+                callback: () => {
+                    this.scene.sound.get('music1').stop();
+                },
+                callbackScope: this,
+                loop: false,
+            }
+        );
+
+        this.scene.time.delayedCall(
+            300,
+            () => this.spawnFoeWraith(),
+            null,
+            this
+        );
+    }
+
+    spawnFoeWraith() {
+        const wraith = new Wraith(
+            this.scene,
+            350,
+            -90,
+            "wraith",
+            0,
+            5
+        ).setAlpha(1);
+        this.scene.foeGroup.add(wraith);
+    }
+
     spawnSultan() {
         this.scene.playAudio("sultanarrive");
         this.scene.time.addEvent(
@@ -88,9 +122,9 @@ export default class FoeGenerator {
             5,
             "sultan",
             0,
-            20
+            5
         );
-        this.scene.time.delayedCall(6000, () => { if (sultan.active) sultan.changeVelocityY(0) }, null, this);
+        this.scene.time.delayedCall(6000, () => { if (sultan.active) sultan.changeVelocityY(1) }, null, this);
         this.scene.tweens.add({
             targets: sultan,
             x: { from: sultan.x, to: this.scene.width - 40 },
@@ -242,11 +276,10 @@ export default class FoeGenerator {
 
     addOrder(i, x, y, minus) {
         const offset = minus * 70;
-
         this.scene.foeGroup.add(
             new Foe(
                 this.scene,
-                x + i * 70,
+                (x + i * 70 <= this.scene.width) ?  x + i * 70 : Phaser.Math.Between(30 , this.scene.width- 30),
                 i * y + offset - 100,
                 "foe0",
                 0,
