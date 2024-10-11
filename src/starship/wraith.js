@@ -38,7 +38,6 @@ class Wraith extends Phaser.GameObjects.Sprite {
             this.body.setSize(90, 110);
         } else if (name === 'wraith') {
             this.body.setSize(100, 125);
-
         } else {
             this.body.setCircle(TYPES[name].circle);
             this.body.setOffset(TYPES[name].offestX, 12);
@@ -65,6 +64,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
             this.direction = -1;
             return;
         }
+
         this.scene.anims.create({
             key: this.name,
             frames: this.scene.anims.generateFrameNumbers(this.name),
@@ -80,6 +80,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         let xMarkSpread = Phaser.Math.Between(-10, 10);
         let yMarkSpread = Phaser.Math.Between(-10, 10);
         this.scene.players.shuffle();
+
         if (this.scene.players.getLength() > 0) {
             let player = this.scene.players.getFirstAlive();
             this.scene.physics.moveTo(
@@ -129,6 +130,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
 
     movementTree() {
         this.movementTo(900, -500, 1000);
+
         const shootEvent = this.scene.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -166,12 +168,14 @@ class Wraith extends Phaser.GameObjects.Sprite {
         let array = [];
         let spacing = (this.scene.width - 20) / 20
         let j = 0;
+
         for (let i = 0; i < 20; i++) {
             if (x + i * spacing < this.scene.width - 10)
                 array.push(x + i * spacing);
             else if (10 + j * spacing < x)
                 array.push(10 + j * spacing);
         }
+
         array = this.sortedBackShots(array);
         array.array.forEach(element => {
             this.backShoot(element, teleportY);
@@ -184,6 +188,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         let sorted = array.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
         sorted.splice(5, 1);
         sorted.splice(6, 1);
+
         return sorted;
     }
 
@@ -266,6 +271,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
             });
         }
     }
+
     massiveShoot() {
         for (let i = 0; i < 20; i++) {
             let angle = (2 * Math.PI * i) / 20;
@@ -285,6 +291,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
 
     movementOne() {
         let razbros = Phaser.Math.Between(0, 100);
+
         const shootEvent = this.scene.time.addEvent({
             delay: 200,
             callback: () => {
@@ -361,7 +368,6 @@ class Wraith extends Phaser.GameObjects.Sprite {
     }
 
     update() {
-
         // if (this.lives <= 20 && this.booster === true) {
         //     this.lives = 40;
         //     this.rage();
