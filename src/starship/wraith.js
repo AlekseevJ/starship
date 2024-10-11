@@ -245,7 +245,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
 
     teleport(x, y) {
         if (this.active) {
-            let razbros = Phaser.Math.Between(-100, 500);
+            let razbros = Phaser.Math.Between(-100, 300);
             this.scene.playAudio("wraithFast");
             this.scene.tweens.add({
                 targets: this,
