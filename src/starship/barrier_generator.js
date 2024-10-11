@@ -61,6 +61,7 @@ export default class BarrierGenerator {
                 if (this.timeLeft <= 0) {
                     this.timerText.setText('Time is up!');
                     this.timerEvent.destroy();
+                    this.distanceEvent.destroy();
                     this.scene.gameOverSceneAtomic();
                 }
             },
