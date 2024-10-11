@@ -46,7 +46,7 @@ export default class AtomicLevelIntro extends Phaser.Scene {
         this.theme.stop();
         this.theme.play({
             mute: false,
-            volume: 0.2,
+            volume: 0.75,
             rate: 1,
             detune: 0,
             seek: 0,
