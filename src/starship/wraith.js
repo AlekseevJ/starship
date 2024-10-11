@@ -18,6 +18,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         this.setSizeFoe(name);
         this.body.setVelocityX(velocityX);
         this.body.setVelocityY(velocityY);
+        this.bodybody.setImmovable(true);
         this.setData("vector", new Phaser.Math.Vector2());
         if (this.name === "guinxu") {
             this.setGuinxuShot();
@@ -132,7 +133,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
             delay: 1000,
             callback: () => {
                 if (this.active) {
-                    this.backShoots(Phaser.Math.Between(-10,10));
+                    this.backShoots();
                 }
             },
             loop: true,
@@ -159,31 +160,46 @@ class Wraith extends Phaser.GameObjects.Sprite {
         // this.lives++;
     }
 
-    backShoots(push = 0) {
-
-        let teleportY = this.scene.height-15;
-        let spacing = (this.scene.width-100) / 20
-        for (let i = 0; i < 20; i++){
-            
-        let shotX = (i+ push)  * spacing; 
-        let shotY = teleportY; 
-            this.backShoot(shotX, shotY)
+    backShoots() {
+        let x = Phaser.Math.Between(10, this.scene.weight - 10);
+        let teleportY = this.scene.height - 15;
+        let array = [];
+        let spacing = (this.scene.width - 20) / 20
+        let j = 0;
+        for (let i = 0; i < 20; i++) {
+            if (x + i * spacing < this.scene.width - 10)
+                array.push(x + i * spacing);
+            else if (10 + j * spacing < x)
+                array.push(10 + j * spacing);
         }
-        
+        array = this.sortedBackShots(array);
+        array.array.forEach(element => {
+            this.backShoot(element, teleportY);
+        });
+        this.backShoot(shotX, shotY);
     }
 
-    backShoot(x,y) {
+    sortedBackShots(array) {
+        let target = this.scene.player.x;
+        let sorted = array.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
+        sorted.splice(5, 1);
+        sorted.splice(6, 1);
+        return sorted;
+    }
+
+
+    backShoot(x, y) {
         let shot = new FoeShot(this.scene, x, y, "wraith", this.name);
         this.scene.foeShots.add(shot);
         this.scene.physics.moveTo(
             shot,
             x,
-            y-10,
+            y - 10,
             300
         );
         shot.shadow.destroy();
     }
-  
+
     movementTwo() {
         let i;
 
@@ -284,24 +300,29 @@ class Wraith extends Phaser.GameObjects.Sprite {
         this.scene.time.delayedCall(
             0,
             () => {
-                if(this.active) {
-                this.movementTo(200 - razbros, 200 - razbros, 2000);}
+                if (this.active) {
+                    this.movementTo(200 - razbros, 200 - razbros, 2000);
+                }
             },
             null,
             this
         );
         this.scene.time.delayedCall(
             2100,
-            () => {if(this.active) {
-                this.movementTo(this.scene.width - 90 - razbros, 150 - razbros, 2000);}
+            () => {
+                if (this.active) {
+                    this.movementTo(this.scene.width - 90 - razbros, 150 - razbros, 2000);
+                }
             },
             null,
             this
         );
         this.scene.time.delayedCall(
             4150,
-            () => {if(this.active) {
-                this.movementTo(this.scene.center_width + 200 - razbros, 450 - razbros, 2000);}
+            () => {
+                if (this.active) {
+                    this.movementTo(this.scene.center_width + 200 - razbros, 450 - razbros, 2000);
+                }
             },
             null,
             this
@@ -326,7 +347,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
                 10,
                 time
             );
-            this.scene.time.delayedCall(time+10, () => { if(this.active){this.body.setVelocityX(0); this.body.setVelocityY(0);} }, null, this);
+            this.scene.time.delayedCall(time + 10, () => { if (this.active) { this.body.setVelocityX(0); this.body.setVelocityY(0); } }, null, this);
         }
     }
 

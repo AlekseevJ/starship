@@ -19,7 +19,6 @@ export default class BarrierGenerator {
 
 
     generateBarriers() {
-        
         this.scene.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -34,14 +33,14 @@ export default class BarrierGenerator {
         const x = Phaser.Math.Between(25, this.scene.width-25);
         let array = [];
         let distance =  this.scene.width / 15;
-        let j = 1;
+        let j = 0;
 
         for(let i = 0; i < c; i++){
             if(x+ i* distance < this.scene.width -24){
             array.push(x + i* distance);
         }
-            else if(x -j * distance > 24) {
-                array.push(x -j * distance);
+            else if(24 + distance*j < x) {
+                array.push(distance*j);
                 j++;
             }
         }
@@ -66,11 +65,11 @@ export default class BarrierGenerator {
         let target = this.scene.player.x;
         let sorted = array.sort((a, b) => Math.abs(a - target) - Math.abs(b - target));
         if(sorted.length <5){
-            return array;
+            return sorted;
         } else {
-            array.splice(3, 1);
-            array.splice(2,1);
-            return array;
+            sorted.splice(3, 1);
+            sorted.splice(2,1);
+            return sorted;
         }
     }
 
