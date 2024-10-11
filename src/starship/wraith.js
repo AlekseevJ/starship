@@ -18,7 +18,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         this.setSizeFoe(name);
         this.body.setVelocityX(velocityX);
         this.body.setVelocityY(velocityY);
-        this.bodybody.setImmovable(true);
+        this.body.setImmovable(true);
         this.setData("vector", new Phaser.Math.Vector2());
         if (this.name === "guinxu") {
             this.setGuinxuShot();
@@ -177,7 +177,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         }
 
         array = this.sortedBackShots(array);
-        array.array.forEach(element => {
+        array.forEach(element => {
             this.backShoot(element, teleportY);
         });
         this.backShoot(shotX, shotY);
