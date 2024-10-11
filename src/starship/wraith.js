@@ -183,12 +183,15 @@ class Wraith extends Phaser.GameObjects.Sprite {
         );
         shot.shadow.destroy();
     }
-
+  
     movementTwo() {
-        for (var i = 0; i < 6; i++) {
+        let i;
+
+        for (i = 0; i < 6; i++) {
             this.twoTeleportMove(i);
             i++;
         }
+
         this.scene.time.delayedCall(
             i * 1000 + 200,
             () => {

@@ -17,9 +17,11 @@ class Foe extends Phaser.GameObjects.Sprite {
     this.points = TYPES[name].points;
     this.lives = TYPES[name].lives;
     this.id = Math.random();
+
     if (this.name !== "foe2") {
       this.spawnShadow(x, y);
     }
+
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.body.setAllowGravity(false);
@@ -27,9 +29,11 @@ class Foe extends Phaser.GameObjects.Sprite {
     this.body.setVelocityX(velocityX);
     this.body.setVelocityY(velocityY);
     this.setData("vector", new Phaser.Math.Vector2());
+
     if (this.name === "guinxu") {
       this.setGuinxuShot();
     }
+    
     this.init();
     this.guinxuShotCounter = 1;
     this.guinxuRandShotParam = 6;
