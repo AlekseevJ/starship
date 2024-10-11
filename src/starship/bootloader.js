@@ -62,6 +62,8 @@ export default class BootLoader extends Phaser.Scene {
         this.load.image("logo", "starship/assets/images/logo.png");
         this.load.image("background", "starship/assets/images/background.png");
         this.load.image('stage_atomic', 'starship/assets/images/stage_atomic.png');
+        this.load.image('wraith_down', 'starship/assets/images/wraith_down2.png');
+        this.load.image('wraith_atomic_bomb', 'starship/assets/images/wraith_atomic_bomb.png');
         Array(4)
             .fill(0)
             .forEach((_, i) => {
@@ -87,6 +89,7 @@ export default class BootLoader extends Phaser.Scene {
         this.load.audio('wraith', "starship/assets/sounds/wraith.mp3");
         this.load.audio('wraithFast', "starship/assets/sounds/wraithFast.mp3");
         this.load.audio('atomic_run', "starship/assets/sounds/atomic_run.mp3");
+        this.load.audio('self_destruction', "starship/assets/sounds/self_destruction.mp3");
         
         Array(3)
             .fill(0)

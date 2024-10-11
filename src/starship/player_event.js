@@ -213,11 +213,11 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
        
 
         if (this.left.isDown) {
-            this.x = this.x-(2*this.scene.distanceIncrement);
+            this.x = this.x-(4);
             this.anims.play(this.name + "left", true);
             this.shadow.setScale(0.5, 1);
         } else if (this.right.isDown) {
-            this.x = this.x+(2*this.scene.distanceIncrement);
+            this.x = this.x+(4);
             this.anims.play(this.name + "right", true);
             this.shadow.setScale(0.5, 1);
         } else {

@@ -59,7 +59,7 @@ export default class Game extends Phaser.Scene {
     this.loadAudios();
     this.addColliders();
     this.tilePosition = 10
-    // this.spawnShake(150,150);
+    this.spawnShake(150,150);
     // this.spawnShake(250,150);
     // this.spawnShake(350,150);
     // this.spawnShake(450,150);
@@ -596,11 +596,11 @@ else {
   finishSceneAtomic() {
     this.game.sound.stopAll();
     this.scene.stop("game");
-    const scene = this.number < 5 ? "transition" : "outro";
+    const scene = 'atomic_level_intro';
     this.scene.start(scene, {
       next: "game",
       name: "STAGE",
-      number: this.number ,
+      number: this.number,
       players: this.playersNumber,
       player1hp: this.player.hp,
       player1life: this.player.life,

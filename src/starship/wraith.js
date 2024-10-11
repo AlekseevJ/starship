@@ -180,7 +180,6 @@ class Wraith extends Phaser.GameObjects.Sprite {
         array.forEach(element => {
             this.backShoot(element, teleportY);
         });
-        this.backShoot(shotX, shotY);
     }
 
     sortedBackShots(array) {

@@ -14,19 +14,35 @@ export default class BarrierGenerator {
         this.addTimerCounter();
         this.addDistanceMeter();
         this.generateBarriers();
-        this.distanceMax = 180;
+        this.distanceMax = 190;
     }
 
 
-    generateBarriers() {
-        this.scene.time.addEvent({
-            delay: 1000,
+    generateBarriers(delayBarrier = 1000) {
+        this.barierEvent = this.scene.time.addEvent({
+            delay: delayBarrier,
             callback: () => {
                 let c =Phaser.Math.Between(1,15);
                 this.generateBarrier(c);
             },
             loop: true
         });
+        if(delayBarrier == 1000){
+        this.scene.time.delayedCall(
+            24000,
+            ()=> {
+                this.barierEvent.destroy();
+                this.scene.time.addEvent({
+                    delay: 500,
+                    callback: () => {
+                        let c =Phaser.Math.Between(1,15);
+                        this.generateBarrier(c);
+                    },
+                    loop: true
+                });},
+            null,
+            this
+        );}
     }
 
     generateBarrier(c) {
@@ -54,7 +70,7 @@ export default class BarrierGenerator {
                 barrier,
                 valueX,
                 this.scene.height+200,
-                300*this.scene.distanceIncrement
+                300*(this.scene.distanceIncrement/2)
             );
             barrier.shadow.destroy();
         });
@@ -76,7 +92,7 @@ export default class BarrierGenerator {
 
 
     addTimerCounter() {
-        this.timeLeft = 90;
+        this.timeLeft = 90-25-18-5;
         this.timerText = this.scene.add.text(this.scene.center_width - 35, 20, `${this.timeLeft}`, {
             font: '32px Arial',
             fill: '#ffffff'

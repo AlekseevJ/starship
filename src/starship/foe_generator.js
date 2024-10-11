@@ -6,7 +6,7 @@ export default class FoeGenerator {
         this.waveFoes = [];
         this.generate();
         this.activeWave = false;
-        this.waves = 0;
+        this.waves = 2;
         this.foeCount = 0;
         // this.addFoeCounter();
         this.eventCounter = 0;
