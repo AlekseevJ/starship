@@ -6,7 +6,7 @@ export default class FoeGenerator {
         this.waveFoes = [];
         this.generate();
         this.activeWave = false;
-        this.waves = 2;
+        this.waves = 3;
         this.foeCount = 0;
         // this.addFoeCounter();
         this.eventCounter = 0;
@@ -133,6 +133,7 @@ export default class FoeGenerator {
         this.scene.tweens.add({
             targets: sultan,
             x: { from: sultan.x, to: this.scene.width - 40 },
+            y: 100,
             duration: 1500,
             repeat: -1,
             yoyo: true,

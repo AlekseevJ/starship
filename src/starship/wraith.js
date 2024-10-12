@@ -134,7 +134,7 @@ class Wraith extends Phaser.GameObjects.Sprite {
         const shootEvent = this.scene.time.addEvent({
             delay: 1000,
             callback: () => {
-                if (this.active) {
+                if (this.lives && this.lives >0) {
                     this.backShoots();
                 }
             },
@@ -163,17 +163,19 @@ class Wraith extends Phaser.GameObjects.Sprite {
     }
 
     backShoots() {
-        let x = Phaser.Math.Between(10, this.scene.weight - 10);
+        let x = Phaser.Math.Between(10, this.scene.width - 10);
         let teleportY = this.scene.height - 15;
         let array = [];
-        let spacing = (this.scene.width - 20) / 20
+        let spacing = (this.scene.width - 20) / 20;
         let j = 0;
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 25; i++) {
             if (x + i * spacing < this.scene.width - 10)
-                array.push(x + i * spacing);
+            {
+                array.push(x + i * spacing);}
             else if (10 + j * spacing < x)
-                array.push(10 + j * spacing);
+                {array.push(10 + j * spacing);
+            j++;}
         }
 
         array = this.sortedBackShots(array);

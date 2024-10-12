@@ -56,7 +56,9 @@ class PowerUp extends Phaser.GameObjects.Sprite {
 
         this.anims.play(this.name, true);
         this.body.setVelocityX(-100);
+        this.body.setVelocityY(10);
         this.shadow.body.setVelocityX(-100);
+        this.shadow.body.setVelocityY(10);
         this.direction = -1;
     }
 

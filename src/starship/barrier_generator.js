@@ -1,4 +1,5 @@
 import FoeShot from './foe_shot';
+import Explosion from './explosion';
 
 export default class BarrierGenerator {
     constructor(scene) {
@@ -15,6 +16,7 @@ export default class BarrierGenerator {
         this.addDistanceMeter();
         this.generateBarriers();
         this.distanceMax = 190;
+        this.bariercountStart = 7;
     }
 
 
@@ -22,7 +24,7 @@ export default class BarrierGenerator {
         this.barierEvent = this.scene.time.addEvent({
             delay: delayBarrier,
             callback: () => {
-                let c =Phaser.Math.Between(1,15);
+                let c =Phaser.Math.Between(this.bariercountStart,15);
                 this.generateBarrier(c);
             },
             loop: true
@@ -35,7 +37,7 @@ export default class BarrierGenerator {
                 this.scene.time.addEvent({
                     delay: 500,
                     callback: () => {
-                        let c =Phaser.Math.Between(1,15);
+                        let c =Phaser.Math.Between(this.bariercountStart,15);
                         this.generateBarrier(c);
                     },
                     loop: true
@@ -92,7 +94,7 @@ export default class BarrierGenerator {
 
 
     addTimerCounter() {
-        this.timeLeft = 90-25-18-5;
+        this.timeLeft = 90-25-18-5+2+3;
         this.timerText = this.scene.add.text(this.scene.center_width - 35, 20, `${this.timeLeft}`, {
             font: '32px Arial',
             fill: '#ffffff'
@@ -106,6 +108,9 @@ export default class BarrierGenerator {
                     this.timerText.setText('Time is up!');
                     this.timerEvent.destroy();
                     this.distanceEvent.destroy();
+                    this.scene.playAudio('explosion');
+                    new Explosion(this.scene, this.scene.center_width, this.scene.center_height, 2000, 2000);
+                    new Explosion(this.scene, this.scene.center_width, this.scene.center_height+100, 2000, 2000);
                     this.scene.gameOverSceneAtomic();
                 }
             },

@@ -43,6 +43,7 @@ export default class Outro extends Phaser.Scene {
     }
 
     startSplash() {
+        this.game.sound.stopAll();
         this.scene.start("splash");
     }
     showLine(text, y) {

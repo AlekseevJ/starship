@@ -37,6 +37,8 @@ export default class ShootingPatterns {
     massacre(x, y, powerUp) {
        this.oneMassacreShoot(x, y, powerUp);
     //    this.oneMassacreShoot(x, y+15, powerUp, 2);
+    //    this.oneMassacreShoot(x, y+15, powerUp, 2);
+    //    this.oneMassacreShoot(x, y+15, powerUp, 2);
     }
 
     oneMassacreShoot(x, y, powerUp, rectangle = 1) {

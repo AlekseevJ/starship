@@ -41,6 +41,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.stepVelocity = 300;
         this.addHbBar();
         this.showCurrentPowerUp();
+        this.destroyControls = false;
     }
 
     addHbBar() {
@@ -176,12 +177,16 @@ class Player extends Phaser.GameObjects.Sprite {
         this.anims.play(this.name, true);
     }
 
+    destroyControl() {
+        this.destroyControls = true;
+        this.anims.play(this.name, true);
+    }
+
     setControls() {
         if (this.name == "player1") {
             this.SPACE = this.scene.input.keyboard.addKey(
                 Phaser.Input.Keyboard.KeyCodes.SPACE
             );
-            this.cursor = this.scene.input.keyboard.createCursorKeys();
 
             this.up = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
             this.left = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -297,6 +302,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update(timestep, delta) {
         if (this.death) return;
+        if(this.destroyControls == false){
         if (this.signalEvent.length > 0) {
             new LightParticle(this.scene, this.x, this.y, 0xff0000, 20);
             this.dash();
@@ -327,7 +333,7 @@ class Player extends Phaser.GameObjects.Sprite {
             this.shoot();
         }
 
-
+    }
         this.scene.trailLayer.add(
             new LightParticle(this.scene, this.x, this.y, 0xffffff, 10)
         );

@@ -20,72 +20,72 @@ export default class Game extends Phaser.Scene {
     this.next = data.next;
     this.playersNumber = data.players;
     this.atomic = data.atomic ? data.atomic : false;
-    if(this.playersNumber == 1){
-    if (this.number === 1) {
-      this.registry.set("currentPowerUp" + 'player1', 'water');
-    this.registry.set("player1hp",  3);
-    this.registry.set("player1life",  2);
-    } 
-  } else {
-    if (this.number === 1) {
-      this.registry.set("currentPowerUp" + 'player1', 'water');
-      this.registry.set("currentPowerUp" + 'player2', 'water');
-    this.registry.set("player1hp",  3);
-    this.registry.set("player1life",  2);
-    this.registry.set("player2hp",  3);
-    this.registry.set("player2life",  2);
-    } 
-  }
+    if (this.playersNumber == 1) {
+      if (this.number === 1) {
+        this.registry.set("currentPowerUp" + 'player1', 'water');
+        this.registry.set("player1hp", 3);
+        this.registry.set("player1life", 2);
+      }
+    } else {
+      if (this.number === 1) {
+        this.registry.set("currentPowerUp" + 'player1', 'water');
+        this.registry.set("currentPowerUp" + 'player2', 'water');
+        this.registry.set("player1hp", 3);
+        this.registry.set("player1life", 2);
+        this.registry.set("player2hp", 3);
+        this.registry.set("player2life", 2);
+      }
+    }
     this.volume = { volume: 0.5 };
   }
 
   create() {
-    if(!this.atomic){
-    this.duration = this.time * 1000;
-    this.width = this.sys.game.config.width;
-    this.height = this.sys.game.config.height;
-    this.center_width = this.width / 2;
-    this.center_height = this.height / 2;
-    new SceneEffect(this).simpleOpen(() => 0);
-    this.addBackground();
-    this.cameras.main.setBackgroundColor(0x333333);
-    this.lights.enable();
-    this.lights.setAmbientColor(0x666666);
-    this.addScores();
-    this.addFoes();
-    this.addPowerUps();
-    this.addPlayers();
-    this.addShots();
-    this.loadAudios();
-    this.addColliders();
-    this.tilePosition = 10
-    this.spawnShake(150,150);
-    // this.spawnShake(250,150);
-    // this.spawnShake(350,150);
-    // this.spawnShake(450,150);
-    this.distanceIncrement = 1;
+    if (!this.atomic) {
+      this.duration = this.time * 1000;
+      this.width = this.sys.game.config.width;
+      this.height = this.sys.game.config.height;
+      this.center_width = this.width / 2;
+      this.center_height = this.height / 2;
+      new SceneEffect(this).simpleOpen(() => 0);
+      this.addBackground();
+      this.cameras.main.setBackgroundColor(0x333333);
+      this.lights.enable();
+      this.lights.setAmbientColor(0x666666);
+      this.addScores();
+      this.addFoes();
+      this.addPowerUps();
+      this.addPlayers();
+      this.addShots();
+      this.loadAudios();
+      this.addColliders();
+      this.tilePosition = 10
+      // this.spawnShake(150, 150);
+      // this.spawnShake(250, 150);
+      // this.spawnShake(350, 150);
+      // this.spawnShake(450, 150);
+      this.distanceIncrement = 1;
     } else {
       this.foeGroup = this.add.group();
       this.duration = this.time * 1000;
-    this.width = this.sys.game.config.width;
-    this.height = this.sys.game.config.height;
-    this.center_width = this.width / 2;
-    this.center_height = this.height / 2;
-    new SceneEffect(this).simpleOpen(() => 0);
-    this.addBackgroundAtomic();
-    this.cameras.main.setBackgroundColor(0x333333);
-    this.lights.enable();
-    this.lights.setAmbientColor(0x666666);
-    
-    this.tilePosition = 20;
-    this.addScores();
-    this.addPowerUps();
-    this.addPlayersEvent();
-    this.addShots();
-    this.loadAudios();
-    this.initBarierGenerator();
-    this.distanceIncrement = 1;
-    this.addCollidersAtomic();
+      this.width = this.sys.game.config.width;
+      this.height = this.sys.game.config.height;
+      this.center_width = this.width / 2;
+      this.center_height = this.height / 2;
+      new SceneEffect(this).simpleOpen(() => 0);
+      this.addBackgroundAtomic();
+      this.cameras.main.setBackgroundColor(0x333333);
+      this.lights.enable();
+      this.lights.setAmbientColor(0x666666);
+
+      this.tilePosition = 20;
+      this.addScores();
+      this.addPowerUps();
+      this.addPlayersEvent();
+      this.addShots();
+      this.loadAudios();
+      this.initBarierGenerator();
+      this.distanceIncrement = 1;
+      this.addCollidersAtomic();
     }
   }
 
@@ -114,7 +114,7 @@ export default class Game extends Phaser.Scene {
   spawnShake(x, y) {
     let shake = new PowerUp(this, x, y);
     this.powerUps.add(shake);
-    this.time.delayedCall(7000, () => {this.powerUps.remove(shake); shake.destroy()}, null, this)
+    this.time.delayedCall(7000, () => { this.powerUps.remove(shake); shake.destroy() }, null, this)
   }
 
 
@@ -139,25 +139,25 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0.5)
       .setScrollFactor(0);
   }
-  addPlayersEvent(){
+  addPlayersEvent() {
     this.trailLayer = this.add.layer();
     this.players = this.add.group();
-    this.player = new PlayerEvent(this, 
-      this.center_width, 
-      this.center_height+280, 
-      'player1', 
-      this.registry.get("currentPowerUp" + 'player1'), 
-      this.registry.get('player1hp'), 
+    this.player = new PlayerEvent(this,
+      this.center_width,
+      this.center_height + 280,
+      'player1',
+      this.registry.get("currentPowerUp" + 'player1'),
+      this.registry.get('player1hp'),
       this.registry.get('player1life'));
     this.players.add(this.player);
 
     if (this.playersNumber > 1) {
-      this.player2 = new PlayerEvent(this, 
-        this.center_width + 70, 
-        this.center_height +280, 
-        'player2', 
+      this.player2 = new PlayerEvent(this,
+        this.center_width + 70,
+        this.center_height + 280,
+        'player2',
         this.registry.get("currentPowerUp" + 'player2'),
-        this.registry.get('player2hp'), 
+        this.registry.get('player2hp'),
         this.registry.get('player2life'));
       this.players.add(this.player2);
     }
@@ -166,22 +166,22 @@ export default class Game extends Phaser.Scene {
   addPlayers() {
     this.trailLayer = this.add.layer();
     this.players = this.add.group();
-    this.player = new Player(this, 
-      this.center_width, 
-      this.center_height, 
-      'player1', 
-      this.registry.get("currentPowerUp" + 'player1'), 
-      this.registry.get('player1hp'), 
+    this.player = new Player(this,
+      this.center_width,
+      this.center_height,
+      'player1',
+      this.registry.get("currentPowerUp" + 'player1'),
+      this.registry.get('player1hp'),
       this.registry.get('player1life'));
     this.players.add(this.player);
 
     if (this.playersNumber > 1) {
-      this.player2 = new Player(this, 
-        this.center_width - 10, 
-        this.center_height - 10, 
-        'player2', 
+      this.player2 = new Player(this,
+        this.center_width - 10,
+        this.center_height - 10,
+        'player2',
         this.registry.get("currentPowerUp" + 'player2'),
-        this.registry.get('player2hp'), 
+        this.registry.get('player2hp'),
         this.registry.get('player2life'));
       this.players.add(this.player2);
     }
@@ -201,7 +201,7 @@ export default class Game extends Phaser.Scene {
   }
 
   addPowerUps() {
-    this.available = ["water","fruit", "vanila", "chocolate"];
+    this.available = ["water", "fruit", "vanila", "chocolate"];
     this.powerUps = this.add.group();
   }
   addCollidersAtomic() {
@@ -214,7 +214,7 @@ export default class Game extends Phaser.Scene {
       },
       this
     );
-    
+
     this.physics.world.on("worldbounds", this.onWorldBoundsAtomic);
   }
   addColliders() {
@@ -291,16 +291,16 @@ export default class Game extends Phaser.Scene {
   }
 
   hitByHpPlayer(player) {
-    if(this.atomic){
-      if(this.distanceIncrement > 1)
-      this.distanceIncrement--;
+    if (this.atomic) {
+      if (this.distanceIncrement > 1)
+        this.distanceIncrement--;
     }
     if (player.blinking === false) {
       player.hp--;
       this.downPowerUp(player);
       player.downHpBar();
       this.playAudio('playerhit');
-      this.registry.set(player.name+"hp",  player.hp);
+      this.registry.set(player.name + "hp", player.hp);
       player.blinking = true;
       this.tweens.add({
         targets: player,
@@ -314,37 +314,38 @@ export default class Game extends Phaser.Scene {
       if (player.hp == 0) {
         player.life--;
         player.lifeCounter.setText(player.life);
-        
-        if(player.life < 0){
-        this.players.remove(player);
-        player.dead();
-        this.playAudio("explosion");
-          if(this.players.countActive() <= 0){
+
+        if (player.life < 0) {
+          this.players.remove(player);
+          player.dead();
+          this.playAudio("explosion");
+          if (this.players.countActive() <= 0) {
+            this.time.delayedCall(
+              2000,
+              () => {
+                if (!this.atomic) {
+                  this.gameOverScene();
+                }
+                else this.gameOverSceneAtomic();
+              },
+              null,
+              this
+            );
+          }
+        } else {
+          this.registry.set(player.name + "life", player.life);
+          this.players.remove(player);
           this.time.delayedCall(
             2000,
             () => {
-              if(!this.atomic){
-              this.gameOverScene();}
-              else this.gameOverSceneAtomic();
+              this.respawnPlayer(player.name);
             },
             null,
             this
           );
+          player.dead();
+          this.playAudio("explosion");
         }
-      } else {
-        this.registry.set(player.name + "life",  player.life);
-        this.players.remove(player);
-        this.time.delayedCall(
-          2000,
-          () => {
-            this.respawnPlayer(player.name);
-          },
-          null,
-          this
-        );
-        player.dead();
-        this.playAudio("explosion");
-      }
         // this.time.delayedCall(1000, () => this.respawnPlayer(player.name), null, this);
 
       }
@@ -394,12 +395,13 @@ export default class Game extends Phaser.Scene {
       duration: 400,
       scale: { from: 1, to: 0 },
     });
-    if( !foe.name === "wraith"){
-    this.tweens.add({
-      targets: foe,
-      duration: 400,
-      tint: { from: 0xffffff, to: 0xff0000 },
-    });}
+    if (!foe.name === "wraith") {
+      this.tweens.add({
+        targets: foe,
+        duration: 400,
+        tint: { from: 0xffffff, to: 0xff0000 },
+      });
+    }
     this.updateScore(shot.playerName, 50);
     this.tweens.add({ targets: foe, y: "-=10", yoyo: true, duration: 100 });
 
@@ -436,10 +438,9 @@ export default class Game extends Phaser.Scene {
     this.hitByHpPlayer(player);
 
     if (foe.name === "guinxu") {
-       foe.lives = foe.lives - 5; if (foe.lives < 0) foe.dead(); 
-      }
-    else if (foe.name === "wraith") 
-    {
+      foe.lives = foe.lives - 5; if (foe.lives < 0) foe.dead();
+    }
+    else if (foe.name === "wraith") {
       foe.lives = foe.lives - 1; if (foe.lives < 0) foe.dead();
     }
     else
@@ -460,22 +461,22 @@ export default class Game extends Phaser.Scene {
     powerUp.destroy();
   }
 
-  boost()
-  {
-    if( this.distanceIncrement < 5){
-    this.distanceIncrement++;}
+  boost() {
+    if (this.distanceIncrement < 5) {
+      this.distanceIncrement++;
+    }
   }
   respawnPlayer(name) {
-    this.registry.set(name+'hp', 3);
+    this.registry.set(name + 'hp', 3);
     this.registry.set("currentPowerUp" + name, 'water');
     if (name == "player2") {
-      if(!this.atomic){
-      this.player2 = new Player(this, this.center_width, this.center_height, name, 'water', 
-        this.registry.get(name+'hp'), this.registry.get(name+'life'));
+      if (!this.atomic) {
+        this.player2 = new Player(this, this.center_width, this.center_height, name, 'water',
+          this.registry.get(name + 'hp'), this.registry.get(name + 'life'));
       } else {
-        this.player2 = new PlayerEvent(this, this.center_width + 70, 
-          this.center_height +280, name, 'water', 
-          this.registry.get(name+'hp'), this.registry.get(name+'life'));
+        this.player2 = new PlayerEvent(this, this.center_width + 70,
+          this.center_height + 280, name, 'water',
+          this.registry.get(name + 'hp'), this.registry.get(name + 'life'));
       }
       this.player2.blinking = true;
       this.players.add(this.player2);
@@ -489,11 +490,13 @@ export default class Game extends Phaser.Scene {
         },
       });
     } else {
-      if(!this.atomic){
-      this.player = new Player(this, this.center_width, this.center_height, name, 'water', 
-        this.registry.get(name+'hp'), this.registry.get(name+'life'));}
-        else this.player = new PlayerEvent(this, this.center_width, this.center_height+280, name, 'water', 
-          this.registry.get(name+'hp'), this.registry.get(name+'life'));
+      if (!this.atomic) {
+        this.player = new Player(this, this.center_width, this.center_height, name, 'water',
+          this.registry.get(name + 'hp'), this.registry.get(name + 'life'));
+      }
+      else this.player = new PlayerEvent(this, this.center_width, this.center_height + 280, name, 'water',
+        this.registry.get(name + 'hp'), this.registry.get(name + 'life'));
+
       this.player.blinking = true;
       this.players.add(this.player);
       this.tweens.add({
@@ -532,7 +535,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
-    if (this.player) this.player.update();
+    if (this.player){console.log(this.player.hp); this.player.update();}
     if (this.player2) this.player2.update();
     this.foes.update();
     this.background.tilePositionY -= this.tilePosition * this.distanceIncrement;
@@ -544,35 +547,51 @@ export default class Game extends Phaser.Scene {
     this.foeShots.children.entries.forEach((shot) => shot.shadow.destroy());
   }
   endScene(i = 0) {
-    if(!this.atomic)
-    this.shadowDestroy();
-    if(i == 0){
-    this.time.delayedCall(
-      2000,
-      () => {
-        this.finishScene();
-      },
-      null,
-      this
-    );}
-else {
-  this.time.delayedCall(
-    2000,
-    () => {
-      this.finishSceneAtomic();
-    },
-    null,
-    this
-  );
-  }
+    if (!this.atomic)
+      this.shadowDestroy();
+    if (i == 0) {
+      if (!this.atomic) {
+        this.players.getChildren().forEach((player) => {
+          player.destroyControl();
+          player.body.setVelocity(0);
+          player.blinking = true;
+          this.tweens.add({
+            targets: player,
+            y: { from: player.y, to: 541 },
+            x: { from: player.x, to: 498 },
+            duration: 3000,
+            ease: "Power2",
+            repeat: 0,
+          })
+        });
+      }
+      this.time.delayedCall(
+        5000,
+        () => {
+          this.finishScene();
+        },
+        null,
+        this
+      );
+    }
+    else {
+      this.time.delayedCall(
+        2000,
+        () => {
+          this.finishSceneAtomic();
+        },
+        null,
+        this
+      );
+    }
   }
   gameOverSceneAtomic() {
     this.time.delayedCall(
-      2000,
+      400,
       () => {
         this.game.sound.stopAll();
         this.scene.stop("game");
-        this.scene.start("gameover", {playerCount: this.playersNumber});
+        this.scene.start("gameover", { playerCount: this.playersNumber });
       },
       null,
       this
@@ -586,7 +605,7 @@ else {
       () => {
         this.game.sound.stopAll();
         this.scene.stop("game");
-        this.scene.start("gameover", {playerCount: this.playersNumber});
+        this.scene.start("gameover", { playerCount: this.playersNumber });
       },
       null,
       this
@@ -594,6 +613,7 @@ else {
   }
 
   finishSceneAtomic() {
+    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
     this.game.sound.stopAll();
     this.scene.stop("game");
     const scene = 'atomic_level_intro';
@@ -609,6 +629,7 @@ else {
   }
 
   finishScene() {
+    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
     this.game.sound.stopAll();
     this.scene.stop("game");
     const scene = this.number < 5 ? "transition" : "outro";
@@ -635,11 +656,11 @@ else {
   }
   downPowerUp(player, powerUp) {
     let lvlUp = this.available.findIndex(value => value == player.powerUp) + 1;
-    if (lvlUp  > 1) {
-      player.powerUp = this.available[lvlUp-2]; 
+    if (lvlUp > 1) {
+      player.powerUp = this.available[lvlUp - 2];
       player.actualCurrentPowerUp();
       this.registry.set("currentPowerUp" + player.name, player.powerUp);
-    } 
+    }
   }
 
   updateScore(playerName, points = 0) {
