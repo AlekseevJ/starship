@@ -535,7 +535,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
-    if (this.player){console.log(this.player.hp); this.player.update();}
+    if (this.player){this.player.update();}
     if (this.player2) this.player2.update();
     this.foes.update();
     this.background.tilePositionY -= this.tilePosition * this.distanceIncrement;
