@@ -63,10 +63,10 @@ export default class Game extends Phaser.Scene {
       this.loadAudios();
       this.addColliders();
       this.tilePosition = 10
-      this.spawnShake(150, 150);
-      this.spawnShake(250, 150);
-      this.spawnShake(350, 150);
-      this.spawnShake(450, 150);
+      // this.spawnShake(150, 150);
+      // this.spawnShake(250, 150);
+      // this.spawnShake(350, 150);
+      // this.spawnShake(450, 150);
       this.distanceIncrement = 1;
     } else {
       this.foeGroup = this.add.group();
