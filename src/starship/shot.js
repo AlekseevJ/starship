@@ -6,6 +6,7 @@ const TYPES = {
     foe: { color: 0x00ff00, radius: 16, intensity: 0.4 },
     sultan: { color: 0x0000ff, radius: 16, intensity: 0.4 },
     wiggle: {color: 0x331144, radius: 16, intensity: 0.4 },
+    xstars:  {color: 0x331144, radius: 16, intensity: 0.4 },
     
 };
 

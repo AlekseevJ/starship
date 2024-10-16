@@ -25,6 +25,10 @@ export default class Game extends Phaser.Scene {
         this.registry.set("currentPowerUp" + 'player1', 'water');
         this.registry.set("player1hp", 3);
         this.registry.set("player1life", 2);
+      } else {
+        
+        this.registry.set("player1hp", data.player1hp);
+        this.registry.set("player1life", data.player1life);
       }
     } else {
       if (this.number === 1) {
@@ -59,10 +63,10 @@ export default class Game extends Phaser.Scene {
       this.loadAudios();
       this.addColliders();
       this.tilePosition = 10
-      // this.spawnShake(150, 150);
-      // this.spawnShake(250, 150);
-      // this.spawnShake(350, 150);
-      // this.spawnShake(450, 150);
+      this.spawnShake(150, 150);
+      this.spawnShake(250, 150);
+      this.spawnShake(350, 150);
+      this.spawnShake(450, 150);
       this.distanceIncrement = 1;
     } else {
       this.foeGroup = this.add.group();
@@ -201,7 +205,7 @@ export default class Game extends Phaser.Scene {
   }
 
   addPowerUps() {
-    this.available = ["water", "fruit", "vanila", "chocolate"];
+    this.available = ["water", "fruit", "vanila", "chocolate", "xstars"];
     this.powerUps = this.add.group();
   }
   addCollidersAtomic() {
@@ -613,23 +617,24 @@ export default class Game extends Phaser.Scene {
   }
 
   finishSceneAtomic() {
-    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
     this.game.sound.stopAll();
     this.scene.stop("game");
+    this.players.getChildren().forEach((chilg) => 
+      { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
     const scene = 'atomic_level_intro';
     this.scene.start(scene, {
       next: "game",
       name: "STAGE",
       number: this.number,
       players: this.playersNumber,
-      player1hp: this.player.hp,
-      player1life: this.player.life,
+      player1hp: this.registry.get('player1hp'),
+      player1life: this.registry.get('player1life'),
       atomic: true,
     });
   }
 
   finishScene() {
-    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
+    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.dead(); });
     this.game.sound.stopAll();
     this.scene.stop("game");
     const scene = this.number < 5 ? "transition" : "outro";
@@ -638,8 +643,8 @@ export default class Game extends Phaser.Scene {
       name: "STAGE",
       number: this.number + 1,
       players: this.playersNumber,
-      player1hp: this.player.hp,
-      player1life: this.player.life,
+      player1hp: this.registry.get('player1hp'),
+      player1life: this.registry.get('player1life'),
       atomic: false,
     });
   }

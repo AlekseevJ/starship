@@ -45,12 +45,12 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
     }
 
     addHbBar() {
+        this.playerHpBar = [];
         if (this.name === 'player1')
-        this.playerHpBar = [
-            this.scene.add.sprite(100, 50, 'heart1'),
-            this.scene.add.sprite(125, 50, 'heart1'), 
-            this.scene.add.sprite(150, 50, 'heart1')
-        ];
+            for(let i = 0; i < this.hp; i++){
+        this.playerHpBar.push(
+            this.scene.add.sprite(100+i*25, 50, 'heart1'));
+    }
         else
         this.playerHpBar = [
             this.scene.add.sprite(this.scene.width-200, 50, 'heart2'),
@@ -58,7 +58,7 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
             this.scene.add.sprite(this.scene.width-150, 50, 'heart2')
         ];
     }
-   
+    
     downHpBar() {
     this.playerHpBar.pop().destroy();
     }
