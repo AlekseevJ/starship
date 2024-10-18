@@ -90,6 +90,7 @@ export default class BootLoader extends Phaser.Scene {
         this.load.audio('wraithFast', "starship/assets/sounds/wraithFast.mp3");
         this.load.audio('atomic_run', "starship/assets/sounds/atomic_run.mp3");
         this.load.audio('self_destruction', "starship/assets/sounds/self_destruction.mp3");
+        this.load.audio('pink', "starship/assets/sounds/pink.mp3");
         
         Array(3)
             .fill(0)
@@ -148,6 +149,10 @@ export default class BootLoader extends Phaser.Scene {
             frameHeight: 21,
         });
         this.load.spritesheet("wraith", "starship/assets/images/wraith1.png", {
+            frameWidth: 200,
+            frameHeight: 200,
+        });
+        this.load.spritesheet("pink_souse", "starship/assets/images/borat.png", {
             frameWidth: 200,
             frameHeight: 200,
         });

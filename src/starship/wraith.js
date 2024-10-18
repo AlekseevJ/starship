@@ -158,8 +158,6 @@ class Wraith extends Phaser.GameObjects.Sprite {
             this
         );
         // this.lives++;
-        // this.lives++;
-        // this.lives++;
     }
 
     backShoots() {

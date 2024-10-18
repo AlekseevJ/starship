@@ -28,6 +28,8 @@ class Foe extends Phaser.GameObjects.Sprite {
     this.setSizeFoe(name);
     this.body.setVelocityX(velocityX);
     this.body.setVelocityY(velocityY);
+    
+    this.body.immovable = true;
     this.setData("vector", new Phaser.Math.Vector2());
 
     if (this.name === "guinxu") {

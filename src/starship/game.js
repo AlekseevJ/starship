@@ -29,6 +29,7 @@ export default class Game extends Phaser.Scene {
         
         this.registry.set("player1hp", data.player1hp);
         this.registry.set("player1life", data.player1life);
+        this.registry.set("currentPowerUp" + 'player1', data.player1powerUp);
       }
     } else {
       if (this.number === 1) {
@@ -408,7 +409,6 @@ export default class Game extends Phaser.Scene {
     }
     this.updateScore(shot.playerName, 50);
     this.tweens.add({ targets: foe, y: "-=10", yoyo: true, duration: 100 });
-
     shot.shadow.destroy();
     shot.destroy();
     if (foe.lives === 0) {
@@ -430,7 +430,6 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-
   hitPlayer(player, shot) {
     this.hitByHpPlayer(player);
 
@@ -447,10 +446,12 @@ export default class Game extends Phaser.Scene {
     else if (foe.name === "wraith") {
       foe.lives = foe.lives - 1; if (foe.lives < 0) foe.dead();
     }
+    else if (foe.name === "pink_souse") {
+      foe.lives = foe.lives - 1; if (foe.lives < 0) foe.dead();
+    }
     else
       foe.dead();
   }
-
 
   pickPowerUp(player, powerUp) {
     this.playAudio("stageclear1");
@@ -531,6 +532,7 @@ export default class Game extends Phaser.Scene {
       sultan_fight: this.sound.add("sultan_fight", { volume: 0.5, loop: true }),
       wraith: this.sound.add("wraith", { volume: 0.5, loop: true }),
       wraithFast: this.sound.add("wraithFast", this.volume),
+      pink: this.sound.add("pink", this.volume),
     };
   }
 
@@ -629,11 +631,12 @@ export default class Game extends Phaser.Scene {
       players: this.playersNumber,
       player1hp: this.registry.get('player1hp'),
       player1life: this.registry.get('player1life'),
+      player1powerUp: this.registry.get('player1powerUp'),
       atomic: true,
     });
   }
 
-  finishScene() {
+  finishScene() { 
     this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.dead(); });
     this.game.sound.stopAll();
     this.scene.stop("game");
@@ -645,6 +648,7 @@ export default class Game extends Phaser.Scene {
       players: this.playersNumber,
       player1hp: this.registry.get('player1hp'),
       player1life: this.registry.get('player1life'),
+      player1powerUp: this.player.powerUp,
       atomic: false,
     });
   }

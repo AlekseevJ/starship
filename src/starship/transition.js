@@ -11,6 +11,7 @@ export default class Transition extends Phaser.Scene {
         this.player1hp = data.player1hp;
         this.player1life = data.player1life;
         this.atomic = data.atomic;
+        this.player1powerUp = data.player1powerUp;
     }
 
     create() {
@@ -95,6 +96,7 @@ export default class Transition extends Phaser.Scene {
             players: this.players,
             player1hp: this.player1hp,
             player1life: this.player1life,
+            player1powerUp: this.player1powerUp,
         });
     }
 

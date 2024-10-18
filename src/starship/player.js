@@ -23,6 +23,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.setAllowGravity(false);
         this.body.setCircle(26);
         this.body.setOffset(6, 9);
+        this.body.immovable = true;
         this.power = 0;
         this.blinking = false;
         this.shootingPatterns = new ShootingPatterns(this.scene, this.name);

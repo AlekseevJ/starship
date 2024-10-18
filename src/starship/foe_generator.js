@@ -1,4 +1,6 @@
-import Foe from "./foe";import Wraith from "./wraith";
+import Foe from "./foe";
+import Wraith from "./wraith";
+import PinkSouse from './pink_souse';
 
 export default class FoeGenerator {
     constructor(scene) {
@@ -27,10 +29,7 @@ export default class FoeGenerator {
             .setScrollFactor(0);
     }
 
-    generate() { 
-        // this.scene.time.delayedCall(2000, () => this.spawnWraith(), null, this); return;
-        // this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this); return;
-        // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this); return;
+    generate() {
         if (this.scene.number === 4) {
             this.scene.time.delayedCall(2000, () => this.generateGuinxu(), null, this);
         } else {
@@ -43,12 +42,16 @@ export default class FoeGenerator {
                                 this.generateManager();
                             }
                         } else if (this.foeCount == 0)
-                            if (this.scene.number === 1 ) {
+                            if (this.scene.number === 1) {
                                 this.spawnSultan();
                                 this.masterGenerator.destroy();
-                            } 
-                            else if(this.scene.number === 2){
+                            }
+                            else if (this.scene.number === 2) {
                                 this.spawnWraith();
+                                this.masterGenerator.destroy();
+                            }
+                            else if (this.scene.number === 3) {
+                                this.spawnUfo();
                                 this.masterGenerator.destroy();
                             }
                             else this.finishScene();
@@ -61,14 +64,21 @@ export default class FoeGenerator {
     }
 
     generateManager() {
-         this.orderedWave();
-          this.orderedWave(5, 400);
-        // this.scene.time.delayedCall(100 * Phaser.Math.Between(5, 20), () => this.wave(), null, this);
+        this.orderedWave();
+        this.orderedWave(5, 400);
+
         if (this.scene.number > 1)
-             this.tank();
+            this.tank();
         if (this.scene.number > 2)
-           this.slider();
-        if(Phaser.Math.Between(1,6) >3){this.waves++;}
+            this.slider();
+        if (Phaser.Math.Between(1, 6) > 3) { this.waves++; }
+    }
+
+    spawnUfo() {
+        let ufo = new PinkSouse(this.scene, -100, -100);
+        ufo.setShadow(new PinkSouse(this.scene, -100, -100, true));
+        this.scene.foeGroup.add(ufo);
+        this.foeCount++;
     }
 
     spawnWraith() {
@@ -285,7 +295,7 @@ export default class FoeGenerator {
         this.scene.foeGroup.add(
             new Foe(
                 this.scene,
-                (x + i * 70 <= this.scene.width) ?  x + i * 70 : Phaser.Math.Between(30 , this.scene.width- 30),
+                (x + i * 70 <= this.scene.width) ? x + i * 70 : Phaser.Math.Between(30, this.scene.width - 30),
                 i * y + offset - 100,
                 "foe0",
                 0,
