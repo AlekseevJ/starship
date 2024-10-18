@@ -84,6 +84,7 @@ export default class Transition extends Phaser.Scene {
             players: this.players,
             player1hp: this.player1hp,
             player1life: this.player1life,
+            player1powerUp: this.player1powerUp,
             atomic: true,
         });
     }

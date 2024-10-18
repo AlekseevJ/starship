@@ -632,6 +632,7 @@ export default class Game extends Phaser.Scene {
       player1hp: this.registry.get('player1hp'),
       player1life: this.registry.get('player1life'),
       player1powerUp: this.registry.get('player1powerUp'),
+      player1powerUp: this.player.powerUp,
       atomic: true,
     });
   }
