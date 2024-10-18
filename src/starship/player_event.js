@@ -40,7 +40,6 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
         this.maxVelocity = 600;
         this.stepVelocity = 300;
         this.addHbBar();
-        this.showCurrentPowerUp();
         this.lightPart = 20;
     }
 
@@ -61,30 +60,6 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
     
     downHpBar() {
     this.playerHpBar.pop().destroy();
-    }
-
-    showCurrentPowerUp() {
-        if (this.name === 'player1')
-            this.currentPowerUpText = this.scene.add.bitmapText(
-                100,
-                62,
-                "wendy",
-                String(this.powerUp),
-                35
-            );
-            else
-            this.currentPowerUpText = this.scene.add.bitmapText(
-                this.scene.width-200,
-                62,
-                "wendy",
-                String(this.powerUp),
-                35
-            );
-       
-    }
-
-    actualCurrentPowerUp() {
-        this.currentPowerUpText.setText(String(this.powerUp));
     }
 
     addLifeCounter() {
@@ -255,7 +230,6 @@ class PlayerEvent extends Phaser.GameObjects.Sprite {
     }
 
     dead() {
-        this.currentPowerUpText.destroy();
         this.playerLifeBar.destroy();
         const explosion = this.scene.add
             .circle(this.x, this.y, 5)

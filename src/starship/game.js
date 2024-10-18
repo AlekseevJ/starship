@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
         this.registry.set("player1hp", 3);
         this.registry.set("player1life", 2);
       } else {
-        
+
         this.registry.set("player1hp", data.player1hp);
         this.registry.set("player1life", data.player1life);
         this.registry.set("currentPowerUp" + 'player1', data.player1powerUp);
@@ -64,10 +64,12 @@ export default class Game extends Phaser.Scene {
       this.loadAudios();
       this.addColliders();
       this.tilePosition = 10
-      // this.spawnShake(150, 150);
-      // this.spawnShake(250, 150);
-      // this.spawnShake(350, 150);
-      // this.spawnShake(450, 150);
+
+      if (this.number == 3) {
+        this.spawnShake(150, 150);
+        this.spawnShake(250, 150);
+      }
+      
       this.distanceIncrement = 1;
     } else {
       this.foeGroup = this.add.group();
@@ -541,7 +543,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update() {
-    if (this.player){this.player.update();}
+    if (this.player) { this.player.update(); }
     if (this.player2) this.player2.update();
     this.foes.update();
     this.background.tilePositionY -= this.tilePosition * this.distanceIncrement;
@@ -621,8 +623,7 @@ export default class Game extends Phaser.Scene {
   finishSceneAtomic() {
     this.game.sound.stopAll();
     this.scene.stop("game");
-    this.players.getChildren().forEach((chilg) => 
-      { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
+    this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.playerHpBar.forEach((chilg) => chilg.destroy()) });
     const scene = 'atomic_level_intro';
     this.scene.start(scene, {
       next: "game",
@@ -637,7 +638,7 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  finishScene() { 
+  finishScene() {
     this.players.getChildren().forEach((chilg) => { if (chilg.active) chilg.dead(); });
     this.game.sound.stopAll();
     this.scene.stop("game");

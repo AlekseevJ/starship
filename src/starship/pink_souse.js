@@ -1,6 +1,6 @@
 import Explosion from "./explosion";
 
-const TYPES = { points: 20000, lives: 15 };
+const TYPES = { points: 20000, lives: 120 };
 
 export default class PinkSouse extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, shadow = false) {
