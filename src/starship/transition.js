@@ -31,7 +31,8 @@ export default class Transition extends Phaser.Scene {
         this.height = this.sys.game.config.height;
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
-        if (!this.atomic) {
+        if (!this.atomic) {    
+            this.game.sound.stopAll();
             this.sound.add("stageclear2").play();
             this.add
                 .bitmapText(
@@ -54,6 +55,8 @@ export default class Transition extends Phaser.Scene {
             this.playMusic("music" + (this.number !== 4 ? this.number : 1));
             this.time.delayedCall(2000, () => this.loadNext(), null, this);
         } else {
+            
+        this.game.sound.stopAll();
             this.add
                 .bitmapText(
                     this.center_width,
